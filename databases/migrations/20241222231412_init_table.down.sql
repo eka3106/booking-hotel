@@ -8,5 +8,5 @@ DROP TABLE IF EXISTS status_pembayaran;
 DROP TABLE IF EXISTS status_booking;
 DROP TABLE IF EXISTS status_kamar;
 DROP TABLE IF EXISTS tipe_kamar;
-DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS booking;
