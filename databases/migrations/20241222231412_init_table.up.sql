@@ -1,28 +1,28 @@
 CREATE TABLE status_pembayaran (
     status_pembayaran_id SERIAL PRIMARY KEY,
     status_pembayaran VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE status_booking (
     status_booking_id SERIAL PRIMARY KEY,
     status_booking_nama VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL    
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL     DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE status_kamar (
     status_kamar_id SERIAL PRIMARY KEY,
     status_kamar_nama VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE tipe_kamar (
     tipe_kamar_id SERIAL PRIMARY KEY,
     tipe_kamar_nama VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE hotel (
@@ -31,8 +31,8 @@ CREATE TABLE hotel (
     alamat_hotel TEXT NOT NULL,    
     telp_hotel VARCHAR(255) NOT NULL,
     email_hotel VARCHAR(255) NOT NULL,    
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL    
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE rating (
@@ -49,8 +49,8 @@ CREATE TABLE fasilitas (
     jenis_fasilitas VARCHAR(255) NOT NULL,
     hotel_id INT NOT NULL,
     descripsi TEXT,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id)
 );
@@ -59,8 +59,8 @@ CREATE TABLE fasilitas (
 CREATE TABLE hak_akses (
     hak_akses_id SERIAL PRIMARY KEY,
     hak_akses VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE kamar (
@@ -70,8 +70,8 @@ CREATE TABLE kamar (
     tipe_kamar_id INT NOT NULL,
     harga INT NOT NULL,
     status_kamar_id INT NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id),
     FOREIGN KEY (status_kamar_id) REFERENCES status_kamar(status_kamar_id),
@@ -80,11 +80,12 @@ CREATE TABLE kamar (
 
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,    
-    email_user VARCHAR(255) NOT NULL,
+    email_user VARCHAR(255) NOT NULL UNIQUE,
+    nama VARCHAR(255) NOT NULL,
     password_user VARCHAR(255) NOT NULL,
     hak_akses_id INT NOT NULL,
     token TEXT[],
-    created_at TIMESTAMP NOT NULL,    
+    created_at TIMESTAMP NOT NULL    DEFAULT CURRENT_TIMESTAMP ,
 
     FOREIGN KEY (hak_akses_id) REFERENCES hak_akses(hak_akses_id)
 );
@@ -97,8 +98,8 @@ CREATE TABLE booking (
     tanggal_check_out DATE NOT NULL,
     total_biaya INT NOT NULL,
     status_booking_id INT NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,    
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL     DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (kamar_id) REFERENCES kamar(kamar_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
@@ -111,8 +112,8 @@ CREATE TABLE pembayaran (
     total_pembayaran INT NOT NULL,
     tanggal_pembayaran DATE NOT NULL,
     status_pembayaran_id INT NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (booking_id)  REFERENCES booking(booking_id),    
     FOREIGN KEY (status_pembayaran_id) REFERENCES status_pembayaran(status_pembayaran_id)    
