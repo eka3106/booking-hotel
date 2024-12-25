@@ -53,11 +53,11 @@ func GetTipeKamarById(c *fiber.Ctx) error {
 	TipeKamar := TipeKamar{}
 	id := c.Params("id")
 	result := databases.DB.Table("tipe_kamar").First(&TipeKamar, id)
-	if result.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data Not Found", 404)
-	}
 	if result.Error != nil {
 		return libs.ResponseError(c, result.Error.Error(), 500)
+	}
+	if result.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data Not Found", 404)
 	}
 	return libs.ResponseSuccess(c, TipeKamar, 200)
 }
@@ -85,11 +85,11 @@ func UpdateTipeKamar(c *fiber.Ctx) error {
 		return libs.ResponseError(c, errors, 400)
 	}
 	result := databases.DB.Table("tipe_kamar").Where("tipe_kamar_id = ?", id).Updates(&TipeKamar)
-	if result.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data Not Found", 404)
-	}
 	if result.Error != nil {
 		return libs.ResponseError(c, result.Error.Error(), 500)
+	}
+	if result.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data Not Found", 404)
 	}
 	return libs.ResponseSuccess(c, "Succes Update Tipe Kamar", 200)
 }

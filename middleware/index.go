@@ -30,7 +30,8 @@ func verifyToken(c *fiber.Ctx) error {
 		return c.Next()
 
 	}
-	isExist := user.CheckToken(token, claims.IdUser)
+
+	isExist := user.CheckToken(token, claims.User_id)
 	if !isExist {
 		return c.Next()
 

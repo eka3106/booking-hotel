@@ -3,7 +3,7 @@ package booking
 import "github.com/gofiber/fiber/v2"
 
 func RouterBooking(app *fiber.App) {
-	router := app.Group("/api/v1")
+	router := app.Group("/api/1.0")
 	router.Post("/booking", CreateBooking)
 	router.Get("/booking", GetAllBooking)
 	router.Get("/booking/:id", GetBookingById)

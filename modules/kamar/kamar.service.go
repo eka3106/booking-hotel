@@ -50,11 +50,11 @@ func GetKamarById(c *fiber.Ctx) error {
 	kamar := Kamar{}
 	id := c.Params("id")
 	err := databases.DB.Table("kamar").First(&kamar, id)
+	if err.Error != nil {
+		return libs.ResponseError(c, err.Error.Error(), 400)
+	}
 	if err.RowsAffected == 0 {
 		return libs.ResponseError(c, "Data not found", 404)
-	}
-	if err != nil {
-		return libs.ResponseError(c, err.Error.Error(), 400)
 	}
 	return libs.ResponseSuccess(c, kamar, 200)
 }
@@ -84,11 +84,11 @@ func UpdateKamar(c *fiber.Ctx) error {
 		return libs.ResponseError(c, errors, 400)
 	}
 	err := databases.DB.Table("kamar").Where("kamar_id = ?", id).Updates(&kamar)
-	if err.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data not found", 404)
-	}
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
+	}
+	if err.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data not found", 404)
 	}
 	return libs.ResponseSuccess(c, "Success update kamar", 200)
 }
@@ -107,11 +107,11 @@ func DeleteKamar(c *fiber.Ctx) error {
 		return libs.ResponseError(c, err.Error(), 400)
 	}
 	err := databases.DB.Table("kamar").Delete(&kamar, id)
-	if err.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data not found", 404)
-	}
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
+	}
+	if err.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data not found", 404)
 	}
 	return libs.ResponseSuccess(c, "Success delete kamar", 200)
 }

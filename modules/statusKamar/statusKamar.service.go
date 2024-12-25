@@ -31,7 +31,7 @@ func CreateStatusKamar(c *fiber.Ctx) error {
 		}
 		return libs.ResponseError(c, errors, 400)
 	}
-	if err := databases.DB.Create(&statusKamar).Error; err != nil {
+	if err := databases.DB.Table("status_kamar").Create(&statusKamar).Error; err != nil {
 		return libs.ResponseError(c, err, 500)
 	}
 	return libs.ResponseSuccess(c, "Success Create Status Kamar", 201)
@@ -39,7 +39,7 @@ func CreateStatusKamar(c *fiber.Ctx) error {
 
 func GetAllStatusKamar(c *fiber.Ctx) error {
 	var statusKamar []StatusKamar
-	if err := databases.DB.Find(&statusKamar).Error; err != nil {
+	if err := databases.DB.Table("status_kamar").Find(&statusKamar).Error; err != nil {
 		return libs.ResponseError(c, err.Error(), 500)
 	}
 	if len(statusKamar) == 0 {
@@ -51,12 +51,12 @@ func GetAllStatusKamar(c *fiber.Ctx) error {
 func GetStatusKamarById(c *fiber.Ctx) error {
 	statusKamar := StatusKamar{}
 	id := c.Params("id")
-	err := databases.DB.First(&statusKamar, id)
-	if err.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data Not Found", 404)
-	}
+	err := databases.DB.Table("status_kamar").First(&statusKamar, id)
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 500)
+	}
+	if err.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data Not Found", 404)
 	}
 	return libs.ResponseSuccess(c, statusKamar, 200)
 }
@@ -83,12 +83,12 @@ func UpdateStatusKamar(c *fiber.Ctx) error {
 		}
 		return libs.ResponseError(c, errors, 400)
 	}
-	result := databases.DB.Model(&statusKamar).Where("status_kamar_id = ?", id).Updates(&statusKamar)
-	if result.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data Not Found", 404)
-	}
+	result := databases.DB.Table("status_kamar").Model(&statusKamar).Where("status_kamar_id = ?", id).Updates(&statusKamar)
 	if result.Error != nil {
 		return libs.ResponseError(c, result.Error.Error(), 500)
+	}
+	if result.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data Not Found", 404)
 	}
 	return libs.ResponseSuccess(c, "Success Update Status Kamar", 200)
 }
@@ -103,12 +103,12 @@ func DeleteStatusKamar(c *fiber.Ctx) error {
 	}
 	statusKamar := StatusKamar{}
 	id := c.Params("id")
-	err := databases.DB.Delete(&statusKamar, id)
-	if err.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data Not Found", 404)
-	}
+	err := databases.DB.Table("status_kamar").Delete(&statusKamar, id)
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error, 500)
+	}
+	if err.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data Not Found", 404)
 	}
 	return libs.ResponseSuccess(c, "Success Delete Status Kamar", 200)
 }

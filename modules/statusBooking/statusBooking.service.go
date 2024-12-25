@@ -31,7 +31,7 @@ func CreateStatusBooking(c *fiber.Ctx) error {
 		}
 		return libs.ResponseError(c, errors, 400)
 	}
-	if err := databases.DB.Create(&statusBooking).Error; err != nil {
+	if err := databases.DB.Table("status_booking").Create(&statusBooking).Error; err != nil {
 		return libs.ResponseError(c, err.Error(), 500)
 	}
 	return libs.ResponseSuccess(c, "Success Create Status Booking", 201)
@@ -39,7 +39,7 @@ func CreateStatusBooking(c *fiber.Ctx) error {
 
 func GetAllStatusBooking(c *fiber.Ctx) error {
 	var statusBooking []StatusBooking
-	if err := databases.DB.Find(&statusBooking).Error; err != nil {
+	if err := databases.DB.Table("status_booking").Find(&statusBooking).Error; err != nil {
 		return libs.ResponseError(c, err, 500)
 	}
 	return libs.ResponseSuccess(c, statusBooking, 200)
@@ -48,12 +48,12 @@ func GetAllStatusBooking(c *fiber.Ctx) error {
 func GetStatusBookingById(c *fiber.Ctx) error {
 	statusBooking := StatusBooking{}
 	id := c.Params("id")
-	err := databases.DB.First(&statusBooking, id)
+	err := databases.DB.Table("status_booking").First(&statusBooking, id)
+	if err.Error != nil {
+		return libs.ResponseError(c, err.Error.Error(), 500)
+	}
 	if err.RowsAffected == 0 {
 		return libs.ResponseError(c, "Data Not Found", 404)
-	}
-	if err != nil {
-		return libs.ResponseError(c, err, 500)
 	}
 	return libs.ResponseSuccess(c, statusBooking, 200)
 }
@@ -79,12 +79,12 @@ func UpdateStatusBooking(c *fiber.Ctx) error {
 		}
 		return libs.ResponseError(c, errors, 400)
 	}
-	result := databases.DB.Model(&statusBooking).Where("status_booking_id = ?", id).Updates(&statusBooking)
-	if result.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data Not Found", 404)
-	}
+	result := databases.DB.Table("status_booking").Model(&statusBooking).Where("status_booking_id = ?", id).Updates(&statusBooking)
 	if result.Error != nil {
 		return libs.ResponseError(c, result.Error.Error(), 500)
+	}
+	if result.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data Not Found", 404)
 	}
 	return libs.ResponseSuccess(c, "Success Update Status Booking", 200)
 }
@@ -99,12 +99,12 @@ func DeleteStatusBooking(c *fiber.Ctx) error {
 	}
 	statusBooking := StatusBooking{}
 	id := c.Params("id")
-	result := databases.DB.Where("status_booking_id = ?", id).Delete(&statusBooking)
-	if result.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data Not Found", 404)
-	}
+	result := databases.DB.Table("status_booking").Where("status_booking_id = ?", id).Delete(&statusBooking)
 	if result.Error != nil {
 		return libs.ResponseError(c, result.Error.Error(), 500)
+	}
+	if result.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data Not Found", 404)
 	}
 	return libs.ResponseSuccess(c, "Success Delete Status Booking", 200)
 }

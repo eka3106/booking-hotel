@@ -3,6 +3,8 @@ package user
 import (
 	"booking-hotel/databases"
 	"booking-hotel/libs"
+	"regexp"
+	"strings"
 
 	"time"
 
@@ -33,9 +35,10 @@ func CreateUser(c *fiber.Ctx) error {
 		return libs.ResponseError(c, err.Error(), 500)
 	} else {
 		user.Password_user = string(bytes)
-		err := databases.DB.Create(&user)
-		if err != nil {
-			return libs.ResponseError(c, err.Error.Error(), 500)
+		query := `INSERT INTO users (nama, email_user, password_user) VALUES (?, ?, ?)`
+		result := databases.DB.Exec(query, user.Nama, user.Email_user, user.Password_user)
+		if result.Error != nil {
+			return libs.ResponseError(c, result.Error.Error(), 500)
 		} else {
 			return libs.ResponseSuccess(c, "Success Create User", 201)
 		}
@@ -49,7 +52,8 @@ func Login(c *fiber.Ctx) error {
 	}
 	email := libs.CleanText(userReq.Email_user)
 	userDb := User{}
-	err := databases.DB.Where("email_user = ?", email).First(&userDb)
+	query := `SELECT * FROM users WHERE email_user = ?`
+	err := databases.DB.Raw(query, email).Scan(&userDb)
 	if err.RowsAffected == 0 {
 		return libs.ResponseError(c, "Email or Password is Wrong", 400)
 	}
@@ -63,12 +67,12 @@ func Login(c *fiber.Ctx) error {
 	if errorJwt != nil {
 		return libs.ResponseError(c, errorJwt.Error(), 500)
 	}
-	userDb.Token = append(userDb.Token, token)
-	err = databases.DB.Save(&userDb)
+	query = `UPDATE users SET token =array_append(token,?)  WHERE user_id = ?`
+	err = databases.DB.Exec(query, token, userDb.User_id)
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 500)
 	}
-	return libs.ResponseSuccess(c, userDb, 200)
+	return libs.ResponseSuccess(c, token, 200)
 }
 
 func Logout(c *fiber.Ctx) error {
@@ -76,10 +80,10 @@ func Logout(c *fiber.Ctx) error {
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
 	}
-	userClaims := claims.(Claims)
-	id := userClaims.IdUser
+	userClaims := claims.(*Claims)
+	id := userClaims.User_id
 	userDb := User{}
-	err := databases.DB.Where("user_id = ?", id).First(&userDb)
+	err := databases.DB.Table("users").Where("user_id = ?", id).First(&userDb)
 	if err.RowsAffected == 0 {
 		return libs.ResponseError(c, "User Not Found", 404)
 	}
@@ -87,13 +91,8 @@ func Logout(c *fiber.Ctx) error {
 		return libs.ResponseError(c, err.Error.Error(), 500)
 	}
 	token := libs.ExtractToken(c)
-	for i, v := range userDb.Token {
-		if v == token {
-			userDb.Token = append(userDb.Token[:i], userDb.Token[i+1:]...)
-			break
-		}
-	}
-	err = databases.DB.Save(&userDb)
+	queryRemoveToken := `UPDATE users SET token=array_remove(token, $1) WHERE user_id=$2`
+	err = databases.DB.Exec(queryRemoveToken, token, id)
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 500)
 	}
@@ -102,7 +101,7 @@ func Logout(c *fiber.Ctx) error {
 
 func createToken(userDb User) (string, error) {
 	jwtClaim := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"idUser":       userDb.User_id,
+		"user_id":      userDb.User_id,
 		"email":        userDb.Email_user,
 		"name":         userDb.Nama,
 		"hak_akses_id": userDb.Hak_akses_id,
@@ -116,16 +115,17 @@ func createToken(userDb User) (string, error) {
 }
 
 func CheckToken(token string, id int) bool {
-	userDb := User{}
-	err := databases.DB.Where("user_id = ?", id).First(&userDb)
-	if err.RowsAffected == 0 {
+	var tokens string
+	query := `SELECT token FROM users WHERE user_id = ?`
+	err := databases.DB.Raw(query, id).Scan(&tokens).Error
+	if err != nil {
 		return false
 	}
-	if err.Error != nil {
-		return false
-	}
-	for _, v := range userDb.Token {
-		if v == token {
+	re := regexp.MustCompile(`[{}]`)
+
+	tokenList := strings.Split(re.ReplaceAllString(tokens, ""), ",")
+	for _, t := range tokenList {
+		if t == token {
 			return true
 		}
 	}

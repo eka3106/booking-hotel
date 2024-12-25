@@ -24,7 +24,7 @@ func CreateRating(c *fiber.Ctx) error {
 	if err := c.BodyParser(&rating); err != nil {
 		return libs.ResponseError(c, err.Error(), 400)
 	}
-	rating.User_id = claims.(*user.Claims).IdUser
+	rating.User_id = claims.(*user.Claims).User_id
 	if err := validate.Struct(rating); err != nil {
 		err := err.(validator.ValidationErrors)
 		errors := map[string]string{}
@@ -81,12 +81,12 @@ func UpdateRating(c *fiber.Ctx) error {
 		}
 		return libs.ResponseError(c, errors, 400)
 	}
-	result := databases.DB.Table("rating").Where("rating_id = ? AND user_id = ?", id, claims.(*user.Claims).IdUser).Updates(&rating)
-	if result.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data not found", 404)
-	}
+	result := databases.DB.Table("rating").Where("rating_id = ? AND user_id = ?", id, claims.(*user.Claims).User_id).Updates(&rating)
 	if result.Error != nil {
 		return libs.ResponseError(c, result.Error.Error(), 400)
+	}
+	if result.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data not found", 404)
 	}
 	return libs.ResponseSuccess(c, "Success update rating", 200)
 }
@@ -100,12 +100,12 @@ func DeleteRating(c *fiber.Ctx) error {
 		return libs.ResponseError(c, "Forbidden", 403)
 	}
 	id := c.Params("id")
-	err := databases.DB.Table("rating").Where("rating_id = ? AND user_id = ?", id, claims.(*user.Claims).IdUser).Delete(&Rating{})
-	if err.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data not found", 404)
-	}
+	err := databases.DB.Table("rating").Where("rating_id = ? AND user_id = ?", id, claims.(*user.Claims).User_id).Delete(&Rating{})
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
+	}
+	if err.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data not found", 404)
 	}
 	return libs.ResponseSuccess(c, "Success delete rating", 200)
 }
@@ -137,13 +137,13 @@ func GetRatingUserId(c *fiber.Ctx) error {
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
 	}
-	id := claims.(*user.Claims).IdUser
+	id := claims.(*user.Claims).User_id
 	err := databases.DB.Table("rating").Where("user_id = ?", id).Find(&rating)
-	if err.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data not found", 404)
-	}
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
+	}
+	if err.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data not found", 404)
 	}
 	return libs.ResponseSuccess(c, rating, 200)
 }
@@ -156,13 +156,13 @@ func GetRatingByHotelIdAndUserId(c *fiber.Ctx) error {
 	}
 	id := c.Params("id")
 	hotelId, _ := strconv.Atoi(id)
-	userId := claims.(*user.Claims).IdUser
+	userId := claims.(*user.Claims).User_id
 	err := databases.DB.Table("rating").Where("hotel_id = ? AND user_id = ?", hotelId, userId).First(&rating)
-	if err.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data not found", 404)
-	}
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
+	}
+	if err.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data not found", 404)
 	}
 	return libs.ResponseSuccess(c, rating, 200)
 }

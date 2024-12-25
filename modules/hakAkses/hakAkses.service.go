@@ -50,11 +50,11 @@ func GetHakAksesById(c *fiber.Ctx) error {
 	hakAkses := HakAkses{}
 	id := c.Params("id")
 	err := databases.DB.First(&hakAkses, id)
+	if err.Error != nil {
+		return libs.ResponseError(c, err.Error.Error(), 400)
+	}
 	if err.RowsAffected == 0 {
 		return libs.ResponseError(c, "Data not found", 404)
-	}
-	if err != nil {
-		return libs.ResponseError(c, err.Error.Error(), 400)
 	}
 	return libs.ResponseSuccess(c, hakAkses, 200)
 }
@@ -81,11 +81,11 @@ func UpdateHakAkses(c *fiber.Ctx) error {
 		return libs.ResponseError(c, errors, 400)
 	}
 	result := databases.DB.Model(&hakAkses).Where("hak_akses_id = ?", id).Updates(&hakAkses)
-	if result.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data not found", 404)
-	}
 	if result.Error != nil {
 		return libs.ResponseError(c, result.Error.Error(), 400)
+	}
+	if result.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data not found", 404)
 	}
 	return libs.ResponseSuccess(c, "Success update hak akses", 200)
 }
@@ -101,11 +101,11 @@ func DeleteHakAkses(c *fiber.Ctx) error {
 	hakAkses := HakAkses{}
 	id := c.Params("id")
 	result := databases.DB.Where("hak_akses_id = ?", id).Delete(&hakAkses)
-	if result.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data not found", 404)
-	}
 	if result.Error != nil {
 		return libs.ResponseError(c, result.Error.Error(), 400)
+	}
+	if result.RowsAffected == 0 {
+		return libs.ResponseError(c, "Data not found", 404)
 	}
 	return libs.ResponseSuccess(c, "Success delete hak akses", 200)
 }

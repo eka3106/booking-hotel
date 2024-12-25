@@ -9,7 +9,7 @@ CREATE TABLE status_booking (
     status_booking_id SERIAL PRIMARY KEY,
     status_booking_nama VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL     DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE status_kamar (
     status_kamar_id SERIAL PRIMARY KEY,
@@ -30,20 +30,17 @@ CREATE TABLE hotel (
     nama_hotel VARCHAR(255) NOT NULL,
     alamat_hotel TEXT NOT NULL,    
     telp_hotel VARCHAR(255) NOT NULL,
-    email_hotel VARCHAR(255) NOT NULL,    
+    email_hotel VARCHAR(255) NOT NULL UNIQUE,    
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE fasilitas (
     fasilitas_id SERIAL PRIMARY KEY,
-    jenis_fasilitas VARCHAR(255) NOT NULL,
-    hotel_id INT NOT NULL,
+    jenis_fasilitas VARCHAR(255) NOT NULL,    
     deskripsi TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id)
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP    
 );
 
 
@@ -74,7 +71,7 @@ CREATE TABLE users (
     email_user VARCHAR(255) NOT NULL UNIQUE,
     nama VARCHAR(255) NOT NULL,
     password_user VARCHAR(255) NOT NULL,
-    hak_akses_id INT NOT NULL,
+    hak_akses_id INT NOT NULL DEFAULT 2,
     token TEXT[],
     created_at TIMESTAMP NOT NULL    DEFAULT CURRENT_TIMESTAMP ,
 

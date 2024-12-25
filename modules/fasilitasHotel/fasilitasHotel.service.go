@@ -1,4 +1,4 @@
-package hotel
+package fasilitashotel
 
 import (
 	"booking-hotel/databases"
@@ -11,7 +11,7 @@ import (
 
 var validate = validator.New()
 
-func CreateHotel(c *fiber.Ctx) error {
+func CreateFasilitasHotel(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
@@ -19,50 +19,47 @@ func CreateHotel(c *fiber.Ctx) error {
 	if claims.(*user.Claims).Hak_akses_id != 1 {
 		return libs.ResponseError(c, "Forbidden", 403)
 	}
-	hotel := Hotel{}
-
-	if err := c.BodyParser(&hotel); err != nil {
-		return libs.ResponseError(c, err.Error(), 400)
+	fasilitasHotel := FasilitasHotel{}
+	if err := c.BodyParser(&fasilitasHotel); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
-
-	if err := validate.Struct(hotel); err != nil {
+	err := validate.Struct(fasilitasHotel)
+	if err != nil {
 		err := err.(validator.ValidationErrors)
 		errors := map[string]string{}
-		for _, e := range err {
-			errors[e.Field()] = e.Tag()
+		for _, err := range err {
+			errors[err.Field()] = err.Tag()
 		}
 		return libs.ResponseError(c, errors, 400)
 	}
-
-	if err := databases.DB.Table("hotel").Create(&hotel).Error; err != nil {
-		return libs.ResponseError(c, err.Error(), 400)
+	if err := databases.DB.Table("fasilitas_hotel").Create(&fasilitasHotel); err.Error != nil {
+		return libs.ResponseError(c, err.Error.Error(), 400)
 	}
-
-	return libs.ResponseSuccess(c, "Success create hotel", 201)
+	return libs.ResponseSuccess(c, "Success create fasilitas hotel", 201)
 }
 
-func GetAllHotel(c *fiber.Ctx) error {
-	var hotel []Hotel
-	if err := databases.DB.Table("hotel").Find(&hotel).Error; err != nil {
+func GetAllFasilitasHotel(c *fiber.Ctx) error {
+	var fasilitasHotel []FasilitasHotel
+	if err := databases.DB.Table("fasilitas_hotel").Find(&fasilitasHotel).Error; err != nil {
 		return libs.ResponseError(c, err.Error(), 400)
 	}
-	return libs.ResponseSuccess(c, hotel, 200)
+	return libs.ResponseSuccess(c, fasilitasHotel, 200)
 }
 
-func GetHotelById(c *fiber.Ctx) error {
-	hotel := Hotel{}
+func GetFasilitasHotelById(c *fiber.Ctx) error {
+	fasilitasHotel := FasilitasHotel{}
 	id := c.Params("id")
-	err := databases.DB.Table("hotel").First(&hotel, id)
+	err := databases.DB.Table("fasilitas_hotel").First(&fasilitasHotel, id)
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
 	}
 	if err.RowsAffected == 0 {
 		return libs.ResponseError(c, "Data not found", 404)
 	}
-	return libs.ResponseSuccess(c, hotel, 200)
+	return libs.ResponseSuccess(c, fasilitasHotel, 200)
 }
 
-func UpdateHotel(c *fiber.Ctx) error {
+func UpdateFasilitasHotel(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
@@ -70,30 +67,22 @@ func UpdateHotel(c *fiber.Ctx) error {
 	if claims.(*user.Claims).Hak_akses_id != 1 {
 		return libs.ResponseError(c, "Forbidden", 403)
 	}
-	hotel := Hotel{}
-	id := c.Params("id")
-	if err := c.BodyParser(&hotel); err != nil {
+	fasilitasHotel := FasilitasHotel{}
+	if err := c.BodyParser(&fasilitasHotel); err != nil {
 		return libs.ResponseError(c, err.Error(), 400)
 	}
-	if err := validate.Struct(hotel); err != nil {
-		err := err.(validator.ValidationErrors)
-		errors := map[string]string{}
-		for _, e := range err {
-			errors[e.Field()] = e.Tag()
-		}
-		return libs.ResponseError(c, errors, 400)
-	}
-	err := databases.DB.Table("hotel").Where("hotel_id = ?", id).Updates(&hotel)
+	id := c.Params("id")
+	err := databases.DB.Table("fasilitas_hotel").Where("fasilitas_hotel_id = ?", id).Updates(&fasilitasHotel)
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
 	}
 	if err.RowsAffected == 0 {
 		return libs.ResponseError(c, "Data not found", 404)
 	}
-	return libs.ResponseSuccess(c, "Success update hotel", 200)
+	return libs.ResponseSuccess(c, "Success update fasilitas hotel", 200)
 }
 
-func DeleteHotel(c *fiber.Ctx) error {
+func DeleteFasilitasHotel(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
@@ -101,14 +90,13 @@ func DeleteHotel(c *fiber.Ctx) error {
 	if claims.(*user.Claims).Hak_akses_id != 1 {
 		return libs.ResponseError(c, "Forbidden", 403)
 	}
-	hotel := Hotel{}
 	id := c.Params("id")
-	err := databases.DB.Table("hotel").Delete(&hotel, id)
+	err := databases.DB.Table("fasilitas_hotel").Where("fasilitas_hotel_id = ?", id).Delete(&FasilitasHotel{})
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
 	}
 	if err.RowsAffected == 0 {
 		return libs.ResponseError(c, "Data not found", 404)
 	}
-	return libs.ResponseSuccess(c, "Success delete hotel", 200)
+	return libs.ResponseSuccess(c, "Success delete fasilitas hotel", 200)
 }

@@ -6,6 +6,7 @@ import (
 	"booking-hotel/middleware"
 	"booking-hotel/modules/booking"
 	"booking-hotel/modules/fasilitas"
+	fasilitashotel "booking-hotel/modules/fasilitasHotel"
 	hakakses "booking-hotel/modules/hakAkses"
 	"booking-hotel/modules/hotel"
 	"booking-hotel/modules/kamar"
@@ -29,6 +30,7 @@ func main() {
 
 	booking.RouterBooking(fiberApp)
 	fasilitas.RouterFasilitas(fiberApp)
+	fasilitashotel.RouterFasilitasHotel(fiberApp)
 	hakakses.RouterHakAkses(fiberApp)
 	hotel.RouterHotel(fiberApp)
 	kamar.RouterKamar(fiberApp)
