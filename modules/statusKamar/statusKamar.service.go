@@ -3,6 +3,7 @@ package statuskamar
 import (
 	"booking-hotel/databases"
 	"booking-hotel/libs"
+	"booking-hotel/modules/user"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -11,9 +12,16 @@ import (
 var validate = validator.New()
 
 func CreateStatusKamar(c *fiber.Ctx) error {
+	claims := c.Locals("user")
+	if claims == nil {
+		return libs.ResponseError(c, "Unauthorized", 401)
+	}
+	if claims.(*user.Claims).Hak_akses_id != 1 {
+		return libs.ResponseError(c, "Forbidden", 403)
+	}
 	statusKamar := StatusKamar{}
 	if err := c.BodyParser(&statusKamar); err != nil {
-		return libs.ResponseError(c, err, 400)
+		return libs.ResponseError(c, err.Error(), 400)
 	}
 	if err := validate.Struct(statusKamar); err != nil {
 		err := err.(validator.ValidationErrors)
@@ -32,7 +40,7 @@ func CreateStatusKamar(c *fiber.Ctx) error {
 func GetAllStatusKamar(c *fiber.Ctx) error {
 	var statusKamar []StatusKamar
 	if err := databases.DB.Find(&statusKamar).Error; err != nil {
-		return libs.ResponseError(c, err, 500)
+		return libs.ResponseError(c, err.Error(), 500)
 	}
 	if len(statusKamar) == 0 {
 		return libs.ResponseError(c, "Data Not Found", 404)
@@ -54,6 +62,13 @@ func GetStatusKamarById(c *fiber.Ctx) error {
 }
 
 func UpdateStatusKamar(c *fiber.Ctx) error {
+	claims := c.Locals("user")
+	if claims == nil {
+		return libs.ResponseError(c, "Unauthorized", 401)
+	}
+	if claims.(*user.Claims).Hak_akses_id != 1 {
+		return libs.ResponseError(c, "Forbidden", 403)
+	}
 	statusKamar := StatusKamar{}
 	id := c.Params("id")
 	if err := c.BodyParser(&statusKamar); err != nil {
@@ -79,6 +94,13 @@ func UpdateStatusKamar(c *fiber.Ctx) error {
 }
 
 func DeleteStatusKamar(c *fiber.Ctx) error {
+	claims := c.Locals("user")
+	if claims == nil {
+		return libs.ResponseError(c, "Unauthorized", 401)
+	}
+	if claims.(*user.Claims).Hak_akses_id != 1 {
+		return libs.ResponseError(c, "Forbidden", 403)
+	}
 	statusKamar := StatusKamar{}
 	id := c.Params("id")
 	err := databases.DB.Delete(&statusKamar, id)

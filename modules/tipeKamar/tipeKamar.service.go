@@ -3,6 +3,7 @@ package tipekamar
 import (
 	"booking-hotel/databases"
 	"booking-hotel/libs"
+	"booking-hotel/modules/user"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -10,7 +11,14 @@ import (
 
 var validate = validator.New()
 
-func CreateTypeKamar(c *fiber.Ctx) error {
+func CreateTipeKamar(c *fiber.Ctx) error {
+	claims := c.Locals("user")
+	if claims == nil {
+		return libs.ResponseError(c, "Unauthorized", 401)
+	}
+	if claims.(*user.Claims).Hak_akses_id != 1 {
+		return libs.ResponseError(c, "Forbidden", 403)
+	}
 	TipeKamar := TipeKamar{}
 	if err := c.BodyParser(&TipeKamar); err != nil {
 		return c.Status(400).JSON(err)
@@ -32,7 +40,7 @@ func CreateTypeKamar(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Succes Create Tipe Kamar", 201)
 }
 
-func GetAllTypeKamar(c *fiber.Ctx) error {
+func GetAllTipeKamar(c *fiber.Ctx) error {
 	var TipeKamar []TipeKamar
 	result := databases.DB.Table("tipe_kamar").Find(&TipeKamar)
 	if result.Error != nil {
@@ -41,7 +49,7 @@ func GetAllTypeKamar(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, TipeKamar, 200)
 }
 
-func GetTypeKamarById(c *fiber.Ctx) error {
+func GetTipeKamarById(c *fiber.Ctx) error {
 	TipeKamar := TipeKamar{}
 	id := c.Params("id")
 	result := databases.DB.Table("tipe_kamar").First(&TipeKamar, id)
@@ -54,7 +62,14 @@ func GetTypeKamarById(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, TipeKamar, 200)
 }
 
-func UpdateTypeKamar(c *fiber.Ctx) error {
+func UpdateTipeKamar(c *fiber.Ctx) error {
+	claims := c.Locals("user")
+	if claims == nil {
+		return libs.ResponseError(c, "Unauthorized", 401)
+	}
+	if claims.(*user.Claims).Hak_akses_id != 1 {
+		return libs.ResponseError(c, "Forbidden", 403)
+	}
 	TipeKamar := TipeKamar{}
 	id := c.Params("id")
 	if err := c.BodyParser(&TipeKamar); err != nil {
@@ -79,7 +94,14 @@ func UpdateTypeKamar(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Succes Update Tipe Kamar", 200)
 }
 
-func DeleteTypeKamar(c *fiber.Ctx) error {
+func DeleteTipeKamar(c *fiber.Ctx) error {
+	claims := c.Locals("user")
+	if claims == nil {
+		return libs.ResponseError(c, "Unauthorized", 401)
+	}
+	if claims.(*user.Claims).Hak_akses_id != 1 {
+		return libs.ResponseError(c, "Forbidden", 403)
+	}
 	id := c.Params("id")
 	result := databases.DB.Table("tipe_kamar").Delete(&TipeKamar{}, id)
 	if result.Error != nil {

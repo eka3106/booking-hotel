@@ -3,6 +3,7 @@ package statusbooking
 import (
 	"booking-hotel/databases"
 	"booking-hotel/libs"
+	"booking-hotel/modules/user"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -11,6 +12,13 @@ import (
 var validate = validator.New()
 
 func CreateStatusBooking(c *fiber.Ctx) error {
+	claims := c.Locals("user")
+	if claims == nil {
+		return libs.ResponseError(c, "Unauthorized", 401)
+	}
+	if claims.(*user.Claims).Hak_akses_id != 1 {
+		return libs.ResponseError(c, "Forbidden", 403)
+	}
 	statusBooking := StatusBooking{}
 	if err := c.BodyParser(&statusBooking); err != nil {
 		return libs.ResponseError(c, err, 400)
@@ -51,6 +59,13 @@ func GetStatusBookingById(c *fiber.Ctx) error {
 }
 
 func UpdateStatusBooking(c *fiber.Ctx) error {
+	claims := c.Locals("user")
+	if claims == nil {
+		return libs.ResponseError(c, "Unauthorized", 401)
+	}
+	if claims.(*user.Claims).Hak_akses_id != 1 {
+		return libs.ResponseError(c, "Forbidden", 403)
+	}
 	statusBooking := StatusBooking{}
 	id := c.Params("id")
 	if err := c.BodyParser(&statusBooking); err != nil {
@@ -75,6 +90,13 @@ func UpdateStatusBooking(c *fiber.Ctx) error {
 }
 
 func DeleteStatusBooking(c *fiber.Ctx) error {
+	claims := c.Locals("user")
+	if claims == nil {
+		return libs.ResponseError(c, "Unauthorized", 401)
+	}
+	if claims.(*user.Claims).Hak_akses_id != 1 {
+		return libs.ResponseError(c, "Forbidden", 403)
+	}
 	statusBooking := StatusBooking{}
 	id := c.Params("id")
 	result := databases.DB.Where("status_booking_id = ?", id).Delete(&statusBooking)

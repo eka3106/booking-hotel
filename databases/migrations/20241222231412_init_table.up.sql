@@ -35,20 +35,11 @@ CREATE TABLE hotel (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE rating (
-    rating_id SERIAL PRIMARY KEY,
-    hotel_id INT NOT NULL,
-    rating INT NOT NULL,
-
-    FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id)
-);
-
-
 CREATE TABLE fasilitas (
     fasilitas_id SERIAL PRIMARY KEY,
     jenis_fasilitas VARCHAR(255) NOT NULL,
     hotel_id INT NOT NULL,
-    descripsi TEXT,
+    deskripsi TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -90,17 +81,29 @@ CREATE TABLE users (
     FOREIGN KEY (hak_akses_id) REFERENCES hak_akses(hak_akses_id)
 );
 
+CREATE TABLE rating (
+    rating_id SERIAL PRIMARY KEY,
+    hotel_id INT NOT NULL,
+    rating INT NOT NULL,
+    user_id INT NOT NULL,
+
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id)
+);
+
 CREATE TABLE booking (
     booking_id SERIAL PRIMARY KEY,
     kamar_id INT NOT NULL,
     user_id INT NOT NULL,
-    tanggal_check_in DATE NOT NULL,
-    tanggal_check_out DATE NOT NULL,
+    hotel_id INT NOT NULL,
+    tanggal_check_in DATE ,    
+    tanggal_check_out DATE ,
     total_biaya INT NOT NULL,
     status_booking_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL     DEFAULT CURRENT_TIMESTAMP,
 
+    FOREIGN KEY (hotel_id) REFERENCES hotel(hotel_id),
     FOREIGN KEY (kamar_id) REFERENCES kamar(kamar_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (status_booking_id) REFERENCES status_booking(status_booking_id)   
@@ -110,10 +113,8 @@ CREATE TABLE pembayaran (
     pembayaran_id SERIAL PRIMARY KEY,
     booking_id INT NOT NULL,
     total_pembayaran INT NOT NULL,
-    tanggal_pembayaran DATE NOT NULL,
-    status_pembayaran_id INT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    tanggal_pembayaran TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status_pembayaran_id INT NOT NULL,    
 
     FOREIGN KEY (booking_id)  REFERENCES booking(booking_id),    
     FOREIGN KEY (status_pembayaran_id) REFERENCES status_pembayaran(status_pembayaran_id)    

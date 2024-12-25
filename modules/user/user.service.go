@@ -3,6 +3,7 @@ package user
 import (
 	"booking-hotel/databases"
 	"booking-hotel/libs"
+
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -101,10 +102,11 @@ func Logout(c *fiber.Ctx) error {
 
 func createToken(userDb User) (string, error) {
 	jwtClaim := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"idUser": userDb.User_id,
-		"email":  userDb.Email_user,
-		"name":   userDb.Nama,
-		"exp":    time.Now().Add(time.Hour * 24 * 365).Unix(),
+		"idUser":       userDb.User_id,
+		"email":        userDb.Email_user,
+		"name":         userDb.Nama,
+		"hak_akses_id": userDb.Hak_akses_id,
+		"exp":          time.Now().Add(time.Hour * 24 * 365).Unix(),
 	})
 	token, err := jwtClaim.SignedString([]byte(viper.GetString("SECRET_JWT")))
 	if err != nil {
