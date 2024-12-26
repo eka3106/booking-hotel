@@ -12,3 +12,7 @@ type StatusKamar struct {
 func (StatusKamar) TableName() string {
 	return "status_kamar"
 }
+
+type RequestStatusKamar struct {
+	Status_kamar_nama string `json:"status_kamar_nama" validate:"required"`
+}

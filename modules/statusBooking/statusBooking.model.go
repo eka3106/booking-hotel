@@ -12,3 +12,7 @@ type StatusBooking struct {
 func (StatusBooking) TableName() string {
 	return "status_booking"
 }
+
+type RequestStatusBooking struct {
+	Status_booking_nama string `json:"status_booking_nama" validate:"required"`
+}

@@ -8,3 +8,7 @@ type TipeKamar struct {
 	Created_at      time.Time `json:"created_at" gorm:"autoCreateTime"`
 	Updated_at      time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
+
+type RequestTipeKamar struct {
+	Tipe_kamar_nama string `json:"tipe_kamar_nama" validate:"required"`
+}

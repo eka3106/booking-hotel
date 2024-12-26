@@ -19,3 +19,8 @@ type ResponsePembayaran struct {
 	Total_pembayaran   int             `json:"total_pembayaran" gorm:"type:int" validate:"required"`
 	Tanggal_pembayaran time.Time       `json:"tanggal_pembayaran" gorm:"autoCreateTime"`
 }
+
+type RequestPembayaran struct {
+	Booking_id       int `json:"booking_id" validate:"required"`
+	Total_pembayaran int `json:"total_pembayaran" gorm:"type:int" validate:"required"`
+}

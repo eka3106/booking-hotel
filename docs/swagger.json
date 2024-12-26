@@ -1,7 +1,1189 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "API untuk reservasi hotel\nTo access the API, you need to register and login first",
+        "title": "Reservasi Hotel API",
+        "contact": {},
+        "version": "1.0"
     },
-    "paths": {}
+    "basePath": "/api/1.0",
+    "paths": {
+        "/1.0/kamar": {
+            "get": {
+                "description": "Get All Kamar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kamar"
+                ],
+                "summary": "Get All Kamar",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/kamar.Kamar"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Kamar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kamar"
+                ],
+                "summary": "Create Kamar",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Kamar",
+                        "name": "CreateKamar",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/kamar.RequestKamar"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Create Kamar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/kamar/{id}": {
+            "get": {
+                "description": "Get Kamar By ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kamar"
+                ],
+                "summary": "Get Kamar By ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Kamar ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/kamar.Kamar"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update Kamar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kamar"
+                ],
+                "summary": "Update Kamar",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Kamar ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Kamar",
+                        "name": "UpdateKamar",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/kamar.RequestKamar"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Update Kamar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete Kamar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kamar"
+                ],
+                "summary": "Delete Kamar",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Kamar ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Delete Kamar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/login": {
+            "post": {
+                "description": "Login User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login User",
+                "parameters": [
+                    {
+                        "description": "Login",
+                        "name": "Login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.RequestLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Login",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/logout": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Logout User",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Logout User",
+                "responses": {
+                    "200": {
+                        "description": "Success Logout",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/pembayaran": {
+            "get": {
+                "description": "Get All Pembayaran",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Pembayaran"
+                ],
+                "summary": "Get All Pembayaran",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pembayaran.ResponsePembayaran"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Pembayaran",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Pembayaran"
+                ],
+                "summary": "Create Pembayaran",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Pembayaran",
+                        "name": "CreatePembayaran",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pembayaran.RequestPembayaran"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Create Pembayaran",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/register": {
+            "post": {
+                "description": "Create User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create User",
+                "parameters": [
+                    {
+                        "description": "Register",
+                        "name": "Register",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.RequestCreateUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Create User",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/register-admin-hotel": {
+            "post": {
+                "description": "Create Admin Hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create Admin Hotel",
+                "parameters": [
+                    {
+                        "description": "Register",
+                        "name": "Register",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.RequestCreateAdminHotel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Create User",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/status-booking": {
+            "get": {
+                "description": "Get All Status Booking",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Status Booking"
+                ],
+                "summary": "Get All Status Booking",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/statusbooking.StatusBooking"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Status Booking",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Status Booking"
+                ],
+                "summary": "Create Status Booking",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Status Booking",
+                        "name": "CreateStatusBooking",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/statusbooking.RequestStatusBooking"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Create Status Booking",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/status-booking/{id}": {
+            "get": {
+                "description": "Get Status Booking By ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Status Booking"
+                ],
+                "summary": "Get Status Booking By ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID Status Booking",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/statusbooking.StatusBooking"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update Status Booking",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Status Booking"
+                ],
+                "summary": "Update Status Booking",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID Status Booking",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Status Booking",
+                        "name": "UpdateStatusBooking",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/statusbooking.RequestStatusBooking"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Update Status Booking",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete Status Booking",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Status Booking"
+                ],
+                "summary": "Delete Status Booking",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID Status Booking",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Delete Status Booking",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/status-kamar": {
+            "get": {
+                "description": "Get All Status Kamar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Status Kamar"
+                ],
+                "summary": "Get All Status Kamar",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/statuskamar.StatusKamar"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/status-kamar/{id}": {
+            "get": {
+                "description": "Get Status Kamar By ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Status Kamar"
+                ],
+                "summary": "Get Status Kamar By ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Status Kamar ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/statuskamar.StatusKamar"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update Status Kamar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Status Kamar"
+                ],
+                "summary": "Update Status Kamar",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Status Kamar ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Status Kamar",
+                        "name": "UpdateStatusKamar",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/statuskamar.RequestStatusKamar"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Update Status Kamar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete Status Kamar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Status Kamar"
+                ],
+                "summary": "Delete Status Kamar",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Status Kamar ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Delete Status Kamar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/tipe-kamar": {
+            "get": {
+                "description": "Get All Tipe Kamar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tipe Kamar"
+                ],
+                "summary": "Get All Tipe Kamar",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tipekamar.TipeKamar"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Tipe Kamar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tipe Kamar"
+                ],
+                "summary": "Create Tipe Kamar",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Tipe Kamar",
+                        "name": "CreateTipeKamar",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tipekamar.RequestTipeKamar"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Create Tipe Kamar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/tipe-kamar/{id}": {
+            "get": {
+                "description": "Get Tipe Kamar By ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tipe Kamar"
+                ],
+                "summary": "Get Tipe Kamar By ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID Tipe Kamar",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tipekamar.TipeKamar"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update Tipe Kamar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tipe Kamar"
+                ],
+                "summary": "Update Tipe Kamar",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID Tipe Kamar",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Tipe Kamar",
+                        "name": "UpdateTipeKamar",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tipekamar.RequestTipeKamar"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Update Tipe Kamar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete Tipe Kamar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tipe Kamar"
+                ],
+                "summary": "Delete Tipe Kamar",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID Tipe Kamar",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Delete Tipe Kamar",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "booking.Booking": {
+            "type": "object",
+            "required": [
+                "hotel_id",
+                "kamar_id",
+                "status_booking_id",
+                "total_biaya",
+                "user_id"
+            ],
+            "properties": {
+                "booking_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                },
+                "jumlah_hari": {
+                    "type": "integer"
+                },
+                "kamar_id": {
+                    "type": "integer"
+                },
+                "status_booking": {
+                    "$ref": "#/definitions/statusbooking.StatusBooking"
+                },
+                "status_booking_id": {
+                    "type": "integer"
+                },
+                "tanggal_check_in": {
+                    "type": "string"
+                },
+                "tanggal_check_out": {
+                    "type": "string"
+                },
+                "total_biaya": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "kamar.Kamar": {
+            "type": "object",
+            "required": [
+                "harga",
+                "nomor_kamar",
+                "tipe_kamar_id"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "harga": {
+                    "type": "integer"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                },
+                "kamar_id": {
+                    "type": "integer"
+                },
+                "nomor_kamar": {
+                    "type": "string"
+                },
+                "status_kamar": {
+                    "$ref": "#/definitions/statuskamar.StatusKamar"
+                },
+                "status_kamar_id": {
+                    "type": "integer"
+                },
+                "tipe_kamar_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "kamar.RequestKamar": {
+            "type": "object",
+            "required": [
+                "harga",
+                "hotel_id",
+                "nomor_kamar",
+                "tipe_kamar_id"
+            ],
+            "properties": {
+                "harga": {
+                    "type": "integer"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                },
+                "nomor_kamar": {
+                    "type": "string"
+                },
+                "status_kamar_id": {
+                    "type": "integer"
+                },
+                "tipe_kamar_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "pembayaran.RequestPembayaran": {
+            "type": "object",
+            "required": [
+                "booking_id",
+                "total_pembayaran"
+            ],
+            "properties": {
+                "booking_id": {
+                    "type": "integer"
+                },
+                "total_pembayaran": {
+                    "type": "integer"
+                }
+            }
+        },
+        "pembayaran.ResponsePembayaran": {
+            "type": "object",
+            "required": [
+                "booking_id",
+                "total_pembayaran"
+            ],
+            "properties": {
+                "booking": {
+                    "$ref": "#/definitions/booking.Booking"
+                },
+                "booking_id": {
+                    "type": "integer"
+                },
+                "pembayaran_id": {
+                    "type": "integer"
+                },
+                "tanggal_pembayaran": {
+                    "type": "string"
+                },
+                "total_pembayaran": {
+                    "type": "integer"
+                }
+            }
+        },
+        "statusbooking.RequestStatusBooking": {
+            "type": "object",
+            "required": [
+                "status_booking_nama"
+            ],
+            "properties": {
+                "status_booking_nama": {
+                    "type": "string"
+                }
+            }
+        },
+        "statusbooking.StatusBooking": {
+            "type": "object",
+            "required": [
+                "status_booking_nama"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "status_booking_id": {
+                    "type": "integer"
+                },
+                "status_booking_nama": {
+                    "type": "string",
+                    "minLength": 3
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "statuskamar.RequestStatusKamar": {
+            "type": "object",
+            "required": [
+                "status_kamar_nama"
+            ],
+            "properties": {
+                "status_kamar_nama": {
+                    "type": "string"
+                }
+            }
+        },
+        "statuskamar.StatusKamar": {
+            "type": "object",
+            "required": [
+                "status_kamar_nama"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "status_kamar_id": {
+                    "type": "integer"
+                },
+                "status_kamar_nama": {
+                    "type": "string",
+                    "minLength": 3
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "tipekamar.RequestTipeKamar": {
+            "type": "object",
+            "required": [
+                "tipe_kamar_nama"
+            ],
+            "properties": {
+                "tipe_kamar_nama": {
+                    "type": "string"
+                }
+            }
+        },
+        "tipekamar.TipeKamar": {
+            "type": "object",
+            "required": [
+                "tipe_kamar_nama"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "tipe_kamar_id": {
+                    "type": "integer"
+                },
+                "tipe_kamar_nama": {
+                    "type": "string",
+                    "minLength": 3
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.RequestCreateAdminHotel": {
+            "type": "object",
+            "required": [
+                "email",
+                "hotel_id",
+                "nama",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                },
+                "nama": {
+                    "type": "string",
+                    "minLength": 3
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                }
+            }
+        },
+        "user.RequestCreateUser": {
+            "type": "object",
+            "required": [
+                "email",
+                "nama",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "nama": {
+                    "type": "string",
+                    "minLength": 3
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                }
+            }
+        },
+        "user.RequestLogin": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                }
+            }
+        }
+    }
 }

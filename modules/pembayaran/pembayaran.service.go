@@ -12,6 +12,16 @@ import (
 
 var validate = validator.New()
 
+// CreatePembayaran godoc
+// @Summary Create Pembayaran
+// @Description Create Pembayaran
+// @Tags Pembayaran
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param CreatePembayaran body RequestPembayaran true "Create Pembayaran"
+// @Success 201 {string} string "Success Create Pembayaran"
+// @Router /1.0/pembayaran [post]
 func CreatePembayaran(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -59,6 +69,15 @@ func CreatePembayaran(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Success create pembayaran", 201)
 }
 
+// GetAllPembayaran godoc
+// @Summary Get All Pembayaran
+// @Description Get All Pembayaran
+// @Tags Pembayaran
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} ResponsePembayaran
+// @Router /1.0/pembayaran [get]
 func GetAllPembayaran(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -71,6 +90,15 @@ func GetAllPembayaran(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, pembayaran, 200)
 }
 
+// GetPembayaranById godoc
+// @Summary Get Pembayaran By ID
+// @Description Get Pembayaran By ID
+// @Tags Pembayaran
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param id path int true "ID Pembayaran"
+// @Success 200 {object} ResponsePembayaran
 func GetPembayaranById(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {

@@ -11,6 +11,16 @@ import (
 
 var validate = validator.New()
 
+// CreateStatusBooking godoc
+// @Summary Create Status Booking
+// @Description Create Status Booking
+// @Tags Status Booking
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param CreateStatusBooking body RequestStatusBooking true "Create Status Booking"
+// @Success 201 {string} string "Success Create Status Booking"
+// @Router /1.0/status-booking [post]
 func CreateStatusBooking(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -37,6 +47,14 @@ func CreateStatusBooking(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Success Create Status Booking", 201)
 }
 
+// GetAllStatusBooking godoc
+// @Summary Get All Status Booking
+// @Description Get All Status Booking
+// @Tags Status Booking
+// @Accept json
+// @Produce json
+// @Success 200 {object} StatusBooking
+// @Router /1.0/status-booking [get]
 func GetAllStatusBooking(c *fiber.Ctx) error {
 	var statusBooking []StatusBooking
 	if err := databases.DB.Table("status_booking").Find(&statusBooking).Error; err != nil {
@@ -45,6 +63,15 @@ func GetAllStatusBooking(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, statusBooking, 200)
 }
 
+// GetStatusBookingById godoc
+// @Summary Get Status Booking By ID
+// @Description Get Status Booking By ID
+// @Tags Status Booking
+// @Accept json
+// @Produce json
+// @Param id path int true "ID Status Booking"
+// @Success 200 {object} StatusBooking
+// @Router /1.0/status-booking/{id} [get]
 func GetStatusBookingById(c *fiber.Ctx) error {
 	statusBooking := StatusBooking{}
 	id := c.Params("id")
@@ -58,6 +85,17 @@ func GetStatusBookingById(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, statusBooking, 200)
 }
 
+// UpdateStatusBooking godoc
+// @Summary Update Status Booking
+// @Description Update Status Booking
+// @Tags Status Booking
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param id path int true "ID Status Booking"
+// @Param UpdateStatusBooking body RequestStatusBooking true "Update Status Booking"
+// @Success 200 {string} string "Success Update Status Booking"
+// @Router /1.0/status-booking/{id} [put]
 func UpdateStatusBooking(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -89,6 +127,16 @@ func UpdateStatusBooking(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Success Update Status Booking", 200)
 }
 
+// DeleteStatusBooking godoc
+// @Summary Delete Status Booking
+// @Description Delete Status Booking
+// @Tags Status Booking
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param id path int true "ID Status Booking"
+// @Success 200 {string} string "Success Delete Status Booking"
+// @Router /1.0/status-booking/{id} [delete]
 func DeleteStatusBooking(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {

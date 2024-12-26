@@ -1,4 +1,794 @@
+basePath: /api/1.0
+definitions:
+  booking.Booking:
+    properties:
+      booking_id:
+        type: integer
+      created_at:
+        type: string
+      hotel_id:
+        type: integer
+      jumlah_hari:
+        type: integer
+      kamar_id:
+        type: integer
+      status_booking:
+        $ref: '#/definitions/statusbooking.StatusBooking'
+      status_booking_id:
+        type: integer
+      tanggal_check_in:
+        type: string
+      tanggal_check_out:
+        type: string
+      total_biaya:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - hotel_id
+    - kamar_id
+    - status_booking_id
+    - total_biaya
+    - user_id
+    type: object
+  kamar.Kamar:
+    properties:
+      created_at:
+        type: string
+      harga:
+        type: integer
+      hotel_id:
+        type: integer
+      kamar_id:
+        type: integer
+      nomor_kamar:
+        type: string
+      status_kamar:
+        $ref: '#/definitions/statuskamar.StatusKamar'
+      status_kamar_id:
+        type: integer
+      tipe_kamar_id:
+        type: integer
+      updated_at:
+        type: string
+    required:
+    - harga
+    - nomor_kamar
+    - tipe_kamar_id
+    type: object
+  kamar.RequestKamar:
+    properties:
+      harga:
+        type: integer
+      hotel_id:
+        type: integer
+      nomor_kamar:
+        type: string
+      status_kamar_id:
+        type: integer
+      tipe_kamar_id:
+        type: integer
+    required:
+    - harga
+    - hotel_id
+    - nomor_kamar
+    - tipe_kamar_id
+    type: object
+  pembayaran.RequestPembayaran:
+    properties:
+      booking_id:
+        type: integer
+      total_pembayaran:
+        type: integer
+    required:
+    - booking_id
+    - total_pembayaran
+    type: object
+  pembayaran.ResponsePembayaran:
+    properties:
+      booking:
+        $ref: '#/definitions/booking.Booking'
+      booking_id:
+        type: integer
+      pembayaran_id:
+        type: integer
+      tanggal_pembayaran:
+        type: string
+      total_pembayaran:
+        type: integer
+    required:
+    - booking_id
+    - total_pembayaran
+    type: object
+  statusbooking.RequestStatusBooking:
+    properties:
+      status_booking_nama:
+        type: string
+    required:
+    - status_booking_nama
+    type: object
+  statusbooking.StatusBooking:
+    properties:
+      created_at:
+        type: string
+      status_booking_id:
+        type: integer
+      status_booking_nama:
+        minLength: 3
+        type: string
+      updated_at:
+        type: string
+    required:
+    - status_booking_nama
+    type: object
+  statuskamar.RequestStatusKamar:
+    properties:
+      status_kamar_nama:
+        type: string
+    required:
+    - status_kamar_nama
+    type: object
+  statuskamar.StatusKamar:
+    properties:
+      created_at:
+        type: string
+      status_kamar_id:
+        type: integer
+      status_kamar_nama:
+        minLength: 3
+        type: string
+      updated_at:
+        type: string
+    required:
+    - status_kamar_nama
+    type: object
+  tipekamar.RequestTipeKamar:
+    properties:
+      tipe_kamar_nama:
+        type: string
+    required:
+    - tipe_kamar_nama
+    type: object
+  tipekamar.TipeKamar:
+    properties:
+      created_at:
+        type: string
+      tipe_kamar_id:
+        type: integer
+      tipe_kamar_nama:
+        minLength: 3
+        type: string
+      updated_at:
+        type: string
+    required:
+    - tipe_kamar_nama
+    type: object
+  user.RequestCreateAdminHotel:
+    properties:
+      email:
+        type: string
+      hotel_id:
+        type: integer
+      nama:
+        minLength: 3
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - hotel_id
+    - nama
+    - password
+    type: object
+  user.RequestCreateUser:
+    properties:
+      email:
+        type: string
+      nama:
+        minLength: 3
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - nama
+    - password
+    type: object
+  user.RequestLogin:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
 info:
   contact: {}
-paths: {}
+  description: |-
+    API untuk reservasi hotel
+    To access the API, you need to register and login first
+  title: Reservasi Hotel API
+  version: "1.0"
+paths:
+  /1.0/kamar:
+    get:
+      consumes:
+      - application/json
+      description: Get All Kamar
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/kamar.Kamar'
+      summary: Get All Kamar
+      tags:
+      - Kamar
+    post:
+      consumes:
+      - application/json
+      description: Create Kamar
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Kamar
+        in: body
+        name: CreateKamar
+        required: true
+        schema:
+          $ref: '#/definitions/kamar.RequestKamar'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success Create Kamar
+          schema:
+            type: string
+      summary: Create Kamar
+      tags:
+      - Kamar
+  /1.0/kamar/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Kamar
+      parameters:
+      - description: Kamar ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Delete Kamar
+          schema:
+            type: string
+      summary: Delete Kamar
+      tags:
+      - Kamar
+    get:
+      consumes:
+      - application/json
+      description: Get Kamar By ID
+      parameters:
+      - description: Kamar ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/kamar.Kamar'
+      summary: Get Kamar By ID
+      tags:
+      - Kamar
+    put:
+      consumes:
+      - application/json
+      description: Update Kamar
+      parameters:
+      - description: Kamar ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Update Kamar
+        in: body
+        name: UpdateKamar
+        required: true
+        schema:
+          $ref: '#/definitions/kamar.RequestKamar'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Update Kamar
+          schema:
+            type: string
+      summary: Update Kamar
+      tags:
+      - Kamar
+  /1.0/login:
+    post:
+      consumes:
+      - application/json
+      description: Login User
+      parameters:
+      - description: Login
+        in: body
+        name: Login
+        required: true
+        schema:
+          $ref: '#/definitions/user.RequestLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Login
+          schema:
+            type: string
+      summary: Login User
+      tags:
+      - User
+  /1.0/logout:
+    post:
+      description: Logout User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Logout
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Logout User
+      tags:
+      - User
+  /1.0/pembayaran:
+    get:
+      consumes:
+      - application/json
+      description: Get All Pembayaran
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pembayaran.ResponsePembayaran'
+      summary: Get All Pembayaran
+      tags:
+      - Pembayaran
+    post:
+      consumes:
+      - application/json
+      description: Create Pembayaran
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Pembayaran
+        in: body
+        name: CreatePembayaran
+        required: true
+        schema:
+          $ref: '#/definitions/pembayaran.RequestPembayaran'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success Create Pembayaran
+          schema:
+            type: string
+      summary: Create Pembayaran
+      tags:
+      - Pembayaran
+  /1.0/register:
+    post:
+      consumes:
+      - application/json
+      description: Create User
+      parameters:
+      - description: Register
+        in: body
+        name: Register
+        required: true
+        schema:
+          $ref: '#/definitions/user.RequestCreateUser'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success Create User
+          schema:
+            type: string
+      summary: Create User
+      tags:
+      - User
+  /1.0/register-admin-hotel:
+    post:
+      consumes:
+      - application/json
+      description: Create Admin Hotel
+      parameters:
+      - description: Register
+        in: body
+        name: Register
+        required: true
+        schema:
+          $ref: '#/definitions/user.RequestCreateAdminHotel'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success Create User
+          schema:
+            type: string
+      summary: Create Admin Hotel
+      tags:
+      - User
+  /1.0/status-booking:
+    get:
+      consumes:
+      - application/json
+      description: Get All Status Booking
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/statusbooking.StatusBooking'
+      summary: Get All Status Booking
+      tags:
+      - Status Booking
+    post:
+      consumes:
+      - application/json
+      description: Create Status Booking
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Status Booking
+        in: body
+        name: CreateStatusBooking
+        required: true
+        schema:
+          $ref: '#/definitions/statusbooking.RequestStatusBooking'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success Create Status Booking
+          schema:
+            type: string
+      summary: Create Status Booking
+      tags:
+      - Status Booking
+  /1.0/status-booking/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Status Booking
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID Status Booking
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Delete Status Booking
+          schema:
+            type: string
+      summary: Delete Status Booking
+      tags:
+      - Status Booking
+    get:
+      consumes:
+      - application/json
+      description: Get Status Booking By ID
+      parameters:
+      - description: ID Status Booking
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/statusbooking.StatusBooking'
+      summary: Get Status Booking By ID
+      tags:
+      - Status Booking
+    put:
+      consumes:
+      - application/json
+      description: Update Status Booking
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID Status Booking
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Status Booking
+        in: body
+        name: UpdateStatusBooking
+        required: true
+        schema:
+          $ref: '#/definitions/statusbooking.RequestStatusBooking'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Update Status Booking
+          schema:
+            type: string
+      summary: Update Status Booking
+      tags:
+      - Status Booking
+  /1.0/status-kamar:
+    get:
+      consumes:
+      - application/json
+      description: Get All Status Kamar
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/statuskamar.StatusKamar'
+      summary: Get All Status Kamar
+      tags:
+      - Status Kamar
+  /1.0/status-kamar/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Status Kamar
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Status Kamar ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Delete Status Kamar
+          schema:
+            type: string
+      summary: Delete Status Kamar
+      tags:
+      - Status Kamar
+    get:
+      consumes:
+      - application/json
+      description: Get Status Kamar By ID
+      parameters:
+      - description: Status Kamar ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/statuskamar.StatusKamar'
+      summary: Get Status Kamar By ID
+      tags:
+      - Status Kamar
+    put:
+      consumes:
+      - application/json
+      description: Update Status Kamar
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Status Kamar ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Status Kamar
+        in: body
+        name: UpdateStatusKamar
+        required: true
+        schema:
+          $ref: '#/definitions/statuskamar.RequestStatusKamar'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Update Status Kamar
+          schema:
+            type: string
+      summary: Update Status Kamar
+      tags:
+      - Status Kamar
+  /1.0/tipe-kamar:
+    get:
+      consumes:
+      - application/json
+      description: Get All Tipe Kamar
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tipekamar.TipeKamar'
+      summary: Get All Tipe Kamar
+      tags:
+      - Tipe Kamar
+    post:
+      consumes:
+      - application/json
+      description: Create Tipe Kamar
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Tipe Kamar
+        in: body
+        name: CreateTipeKamar
+        required: true
+        schema:
+          $ref: '#/definitions/tipekamar.RequestTipeKamar'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success Create Tipe Kamar
+          schema:
+            type: string
+      summary: Create Tipe Kamar
+      tags:
+      - Tipe Kamar
+  /1.0/tipe-kamar/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Tipe Kamar
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID Tipe Kamar
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Delete Tipe Kamar
+          schema:
+            type: string
+      summary: Delete Tipe Kamar
+      tags:
+      - Tipe Kamar
+    get:
+      consumes:
+      - application/json
+      description: Get Tipe Kamar By ID
+      parameters:
+      - description: ID Tipe Kamar
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tipekamar.TipeKamar'
+      summary: Get Tipe Kamar By ID
+      tags:
+      - Tipe Kamar
+    put:
+      consumes:
+      - application/json
+      description: Update Tipe Kamar
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID Tipe Kamar
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Tipe Kamar
+        in: body
+        name: UpdateTipeKamar
+        required: true
+        schema:
+          $ref: '#/definitions/tipekamar.RequestTipeKamar'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Update Tipe Kamar
+          schema:
+            type: string
+      summary: Update Tipe Kamar
+      tags:
+      - Tipe Kamar
 swagger: "2.0"

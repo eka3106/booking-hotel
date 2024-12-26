@@ -17,6 +17,15 @@ import (
 
 var validate = validator.New()
 
+// CreateUser untuk membuat user godoc
+// @Summary Create User
+// @Description Create User
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param Register body RequestCreateUser true "Register"
+// @Success 201 {string} string "Success Create User"
+// @Router /1.0/register [post]
 func CreateUser(c *fiber.Ctx) error {
 	user := User{}
 	if err := c.BodyParser(&user); err != nil {
@@ -45,6 +54,15 @@ func CreateUser(c *fiber.Ctx) error {
 	}
 }
 
+// CreateAdminHotel untuk membuat user admin hotel godoc
+// @Summary Create Admin Hotel
+// @Description Create Admin Hotel
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param Register body RequestCreateAdminHotel true "Register"
+// @Success 201 {string} string "Success Create User"
+// @Router /1.0/register-admin-hotel [post]
 func CreateAdminHotel(c *fiber.Ctx) error {
 	user := User{}
 	if err := c.BodyParser(&user); err != nil {
@@ -73,6 +91,15 @@ func CreateAdminHotel(c *fiber.Ctx) error {
 	}
 }
 
+// Login untuk login user godoc
+// @Summary Login User
+// @Description Login User
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param Login body RequestLogin true "Login"
+// @Success 200 {string} string "Success Login"
+// @Router /1.0/login [post]
 func Login(c *fiber.Ctx) error {
 	userReq := User{}
 	if err := c.BodyParser(&userReq); err != nil {
@@ -103,6 +130,14 @@ func Login(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, token, 200)
 }
 
+// Logout untuk logout user godoc
+// @Summary Logout User
+// @Description Logout User
+// @Tags User
+// @Security Bearer
+// @Produce json
+// @Success 200 {string} string "Success Logout"
+// @Router /1.0/logout [post]
 func Logout(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {

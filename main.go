@@ -25,8 +25,11 @@ import (
 // @title Reservasi Hotel API
 // @version 1.0
 // @description API untuk reservasi hotel
+// @description To access the API, you need to register and login first
 // @BasePath /api/1.0
-
+// @securityDefinitions.api_key Bearer:
+// @in header
+// @name Authorization
 func main() {
 
 	defer databases.SqlDb.Close()

@@ -11,12 +11,22 @@ import (
 
 var validate = validator.New()
 
+// CreateTipeKamar godoc
+// @Summary Create Tipe Kamar
+// @Description Create Tipe Kamar
+// @Tags Tipe Kamar
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param CreateTipeKamar body RequestTipeKamar true "Create Tipe Kamar"
+// @Success 201 {string} string "Success Create Tipe Kamar"
+// @Router /1.0/tipe-kamar [post]
 func CreateTipeKamar(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
 	}
-	if claims.(*user.Claims).Hak_akses_id != 1 {
+	if claims.(*user.Claims).Hak_akses_id != 1 && claims.(*user.Claims).Hak_akses_id != 3 {
 		return libs.ResponseError(c, "Forbidden", 403)
 	}
 	TipeKamar := TipeKamar{}
@@ -40,6 +50,14 @@ func CreateTipeKamar(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Succes Create Tipe Kamar", 201)
 }
 
+// GetAllTipeKamar godoc
+// @Summary Get All Tipe Kamar
+// @Description Get All Tipe Kamar
+// @Tags Tipe Kamar
+// @Accept json
+// @Produce json
+// @Success 200 {object} TipeKamar
+// @Router /1.0/tipe-kamar [get]
 func GetAllTipeKamar(c *fiber.Ctx) error {
 	var TipeKamar []TipeKamar
 	result := databases.DB.Table("tipe_kamar").Find(&TipeKamar)
@@ -49,6 +67,15 @@ func GetAllTipeKamar(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, TipeKamar, 200)
 }
 
+// GetTipeKamarById godoc
+// @Summary Get Tipe Kamar By ID
+// @Description Get Tipe Kamar By ID
+// @Tags Tipe Kamar
+// @Accept json
+// @Produce json
+// @Param id path int true "ID Tipe Kamar"
+// @Success 200 {object} TipeKamar
+// @Router /1.0/tipe-kamar/{id} [get]
 func GetTipeKamarById(c *fiber.Ctx) error {
 	TipeKamar := TipeKamar{}
 	id := c.Params("id")
@@ -62,12 +89,23 @@ func GetTipeKamarById(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, TipeKamar, 200)
 }
 
+// UpdateTipeKamar godoc
+// @Summary Update Tipe Kamar
+// @Description Update Tipe Kamar
+// @Tags Tipe Kamar
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param id path int true "ID Tipe Kamar"
+// @Param UpdateTipeKamar body RequestTipeKamar true "Update Tipe Kamar"
+// @Success 200 {string} string "Success Update Tipe Kamar"
+// @Router /1.0/tipe-kamar/{id} [put]
 func UpdateTipeKamar(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
 	}
-	if claims.(*user.Claims).Hak_akses_id != 1 {
+	if claims.(*user.Claims).Hak_akses_id != 1 && claims.(*user.Claims).Hak_akses_id != 3 {
 		return libs.ResponseError(c, "Forbidden", 403)
 	}
 	TipeKamar := TipeKamar{}
@@ -94,6 +132,16 @@ func UpdateTipeKamar(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Succes Update Tipe Kamar", 200)
 }
 
+// DeleteTipeKamar godoc
+// @Summary Delete Tipe Kamar
+// @Description Delete Tipe Kamar
+// @Tags Tipe Kamar
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param id path int true "ID Tipe Kamar"
+// @Success 200 {string} string "Success Delete Tipe Kamar"
+// @Router /1.0/tipe-kamar/{id} [delete]
 func DeleteTipeKamar(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {

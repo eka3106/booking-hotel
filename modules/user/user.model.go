@@ -25,3 +25,21 @@ type Claims struct {
 	Email        string `json:"email"`
 	jwt.RegisteredClaims
 }
+
+type RequestCreateUser struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=8"`
+	Nama     string `json:"nama" validate:"required,min=3"`
+}
+
+type RequestCreateAdminHotel struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=8"`
+	Nama     string `json:"nama" validate:"required,min=3"`
+	Hotel_id int    `json:"hotel_id" validate:"required"`
+}
+
+type RequestLogin struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=8"`
+}

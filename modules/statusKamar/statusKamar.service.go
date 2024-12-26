@@ -11,6 +11,15 @@ import (
 
 var validate = validator.New()
 
+// CreateStatusKamar godoc
+// @Summary Create Status Kamar
+// @Description Create Status Kamar
+// @Tags Status Kamar
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param CreateStatusKamar body RequestStatusKamar true "Create Status Kamar"
+// @Success 201 {string} string "Success Create Status Kamar"
 func CreateStatusKamar(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -37,6 +46,14 @@ func CreateStatusKamar(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Success Create Status Kamar", 201)
 }
 
+// GetAllStatusKamar godoc
+// @Summary Get All Status Kamar
+// @Description Get All Status Kamar
+// @Tags Status Kamar
+// @Accept json
+// @Produce json
+// @Success 200 {object} StatusKamar
+// @Router /1.0/status-kamar [get]
 func GetAllStatusKamar(c *fiber.Ctx) error {
 	var statusKamar []StatusKamar
 	if err := databases.DB.Table("status_kamar").Find(&statusKamar).Error; err != nil {
@@ -48,6 +65,15 @@ func GetAllStatusKamar(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, statusKamar, 200)
 }
 
+// GetStatusKamarById godoc
+// @Summary Get Status Kamar By ID
+// @Description Get Status Kamar By ID
+// @Tags Status Kamar
+// @Accept json
+// @Produce json
+// @Param id path int true "Status Kamar ID"
+// @Success 200 {object} StatusKamar
+// @Router /1.0/status-kamar/{id} [get]
 func GetStatusKamarById(c *fiber.Ctx) error {
 	statusKamar := StatusKamar{}
 	id := c.Params("id")
@@ -61,6 +87,17 @@ func GetStatusKamarById(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, statusKamar, 200)
 }
 
+// UpdateStatusKamar godoc
+// @Summary Update Status Kamar
+// @Description Update Status Kamar
+// @Tags Status Kamar
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param id path int true "Status Kamar ID"
+// @Param UpdateStatusKamar body RequestStatusKamar true "Update Status Kamar"
+// @Success 200 {string} string "Success Update Status Kamar"
+// @Router /1.0/status-kamar/{id} [put]
 func UpdateStatusKamar(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -93,6 +130,16 @@ func UpdateStatusKamar(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Success Update Status Kamar", 200)
 }
 
+// DeleteStatusKamar godoc
+// @Summary Delete Status Kamar
+// @Description Delete Status Kamar
+// @Tags Status Kamar
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param id path int true "Status Kamar ID"
+// @Success 200 {string} string "Success Delete Status Kamar"
+// @Router /1.0/status-kamar/{id} [delete]
 func DeleteStatusKamar(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
