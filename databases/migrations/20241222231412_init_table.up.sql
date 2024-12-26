@@ -95,6 +95,7 @@ CREATE TABLE booking (
     hotel_id INT NOT NULL,
     tanggal_check_in DATE ,    
     tanggal_check_out DATE ,
+    jumlah_hari INT NOT NULL,
     total_biaya INT NOT NULL,
     status_booking_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

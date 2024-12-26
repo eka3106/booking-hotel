@@ -5,11 +5,11 @@ import "github.com/gofiber/fiber/v2"
 func RouterBooking(app *fiber.App) {
 	router := app.Group("/api/1.0")
 	router.Post("/booking", CreateBooking)
-	router.Get("/booking", GetAllBooking)
-	router.Get("/booking/:id", GetBookingById)
-	router.Get("/booking/by-user", GetBookingByUserId)
-	router.Get("/booking/by-hotel/:id", GetBookingByHotelId)
-	router.Patch("/booking/check-in", UpdateBookingCheckIn)
-	router.Patch("booking/check-out", UpdateBookingCheckOut)
-	router.Delete("/:id", DeleteBooking)
+	router.Get("/booking", GetAllBookingByUser)
+	router.Get("/booking/user/:id", GetBookingUserById)
+	router.Get("/booking/admin", GetAllBookingByAdminHotel)
+	router.Get("/booking/admin/:id", GetBookingHotelById)
+	router.Patch("/booking/proses-reservasi", UpdateAdminBooking)
+
+	// router.Delete("/booking/:id", CancelBooking)
 }

@@ -16,7 +16,7 @@ func CreateFasilitasHotel(c *fiber.Ctx) error {
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
 	}
-	if claims.(*user.Claims).Hak_akses_id != 1 {
+	if claims.(*user.Claims).Hak_akses_id != 1 && claims.(*user.Claims).Hak_akses_id != 3 {
 		return libs.ResponseError(c, "Forbidden", 403)
 	}
 	fasilitasHotel := FasilitasHotel{}
@@ -68,6 +68,10 @@ func CreateFasilitasHotel(c *fiber.Ctx) error {
 	// if inFasilitasHotel {
 	//     return libs.ResponseError(c, "Fasilitas hotel already exist", 400)
 	// }
+
+	if claims.(*user.Claims).Hak_akses_id == 3 {
+		fasilitasHotel.Hotel_id = claims.(*user.Claims).Hotel_id
+	}
 
 	if err := databases.DB.Table("fasilitas_hotel").Create(&fasilitasHotel); err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
@@ -144,7 +148,7 @@ func UpdateFasilitasHotel(c *fiber.Ctx) error {
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
 	}
-	if claims.(*user.Claims).Hak_akses_id != 1 {
+	if claims.(*user.Claims).Hak_akses_id != 1 && claims.(*user.Claims).Hak_akses_id != 3 {
 		return libs.ResponseError(c, "Forbidden", 403)
 	}
 	fasilitasHotel := FasilitasHotel{}
@@ -205,7 +209,7 @@ func DeleteFasilitasHotel(c *fiber.Ctx) error {
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
 	}
-	if claims.(*user.Claims).Hak_akses_id != 1 {
+	if claims.(*user.Claims).Hak_akses_id != 1 && claims.(*user.Claims).Hak_akses_id != 3 {
 		return libs.ResponseError(c, "Forbidden", 403)
 	}
 	id := c.Params("id")

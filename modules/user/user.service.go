@@ -45,6 +45,34 @@ func CreateUser(c *fiber.Ctx) error {
 	}
 }
 
+func CreateAdminHotel(c *fiber.Ctx) error {
+	user := User{}
+	if err := c.BodyParser(&user); err != nil {
+		return libs.ResponseError(c, err.Error(), 400)
+	}
+	if err := validate.Struct(user); err != nil {
+		err := err.(validator.ValidationErrors)
+		errors := map[string]string{}
+		for _, err := range err {
+			errors[err.Field()] = err.Tag()
+		}
+		return libs.ResponseError(c, errors, 400)
+	}
+	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password_user), bcrypt.DefaultCost)
+	if err != nil {
+		return libs.ResponseError(c, err.Error(), 500)
+	} else {
+		user.Password_user = string(bytes)
+		query := `INSERT INTO users (nama, email_user, password_user, hotel_id, hak_akses_id) VALUES (?, ?, ?, ?, ?)`
+		result := databases.DB.Exec(query, user.Nama, user.Email_user, user.Password_user, user.Hotel_id, 3)
+		if result.Error != nil {
+			return libs.ResponseError(c, result.Error.Error(), 500)
+		} else {
+			return libs.ResponseSuccess(c, "Success Create User", 201)
+		}
+	}
+}
+
 func Login(c *fiber.Ctx) error {
 	userReq := User{}
 	if err := c.BodyParser(&userReq); err != nil {
@@ -105,6 +133,7 @@ func createToken(userDb User) (string, error) {
 		"email":        userDb.Email_user,
 		"name":         userDb.Nama,
 		"hak_akses_id": userDb.Hak_akses_id,
+		"hotel_id":     userDb.Hotel_id,
 		"exp":          time.Now().Add(time.Hour * 24 * 365).Unix(),
 	})
 	token, err := jwtClaim.SignedString([]byte(viper.GetString("SECRET_JWT")))

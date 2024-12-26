@@ -8,3 +8,7 @@ type StatusBooking struct {
 	Created_at          time.Time `json:"created_at" gorm:"autoCreateTime"`
 	Updated_at          time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
+
+func (StatusBooking) TableName() string {
+	return "status_booking"
+}

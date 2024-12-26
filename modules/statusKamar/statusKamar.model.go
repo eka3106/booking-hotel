@@ -8,3 +8,7 @@ type StatusKamar struct {
 	Created_at        time.Time `json:"created_at" gorm:"autoCreateTime"`
 	Updated_at        time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
+
+func (StatusKamar) TableName() string {
+	return "status_kamar"
+}
