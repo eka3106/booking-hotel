@@ -22,3 +22,7 @@ type ResponseHotel struct {
 	Created_at   string `json:"created_at" gorm:"autoCreateTime"`
 	Updated_at   string `json:"updated_at" gorm:"autoUpdateTime"`
 }
+
+func (Hotel) TableName() string {
+	return "hotel"
+}

@@ -3,10 +3,7 @@ package fasilitashotel
 import (
 	"booking-hotel/databases"
 	"booking-hotel/libs"
-	"booking-hotel/modules/fasilitas"
-	"booking-hotel/modules/hotel"
 	"booking-hotel/modules/user"
-	"sync"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -35,104 +32,104 @@ func CreateFasilitasHotel(c *fiber.Ctx) error {
 		}
 		return libs.ResponseError(c, errors, 400)
 	}
-	checkHotel := make(chan bool)
-	checkFasilitas := make(chan bool)
-	checkInFasilitasHotel := make(chan bool)
-	var wg sync.WaitGroup
-	wg.Add(1)
-    go checkFasilitasHotelIsExist(fasilitasHotel.Hotel_id, fasilitasHotel.Fasilitas_id, &wg, checkInFasilitasHotel)
+	// checkHotel := make(chan bool)
+	// checkFasilitas := make(chan bool)
+	// checkInFasilitasHotel := make(chan bool)
+	// var wg sync.WaitGroup
+	// wg.Add(1)
+	// go checkFasilitasHotelIsExist(fasilitasHotel.Hotel_id, fasilitasHotel.Fasilitas_id, &wg, checkInFasilitasHotel)
 
-    wg.Add(1)
-    go checkIsFasilitasExist(fasilitasHotel.Fasilitas_id, &wg, checkFasilitas)
+	// wg.Add(1)
+	// go checkIsFasilitasExist(fasilitasHotel.Fasilitas_id, &wg, checkFasilitas)
 
-    wg.Add(1)
-    go checkIsHotelExist(fasilitasHotel.Hotel_id, &wg, checkHotel)
+	// wg.Add(1)
+	// go checkIsHotelExist(fasilitasHotel.Hotel_id, &wg, checkHotel)
 
-	go func() {
-        wg.Wait()
-        close(checkHotel)
-        close(checkFasilitas)
-        close(checkInFasilitasHotel)
-    }()
+	// go func() {
+	//     wg.Wait()
+	//     close(checkHotel)
+	//     close(checkFasilitas)
+	//     close(checkInFasilitasHotel)
+	// }()
 
-    hotelExists := <-checkHotel
-    fasilitasExists := <-checkFasilitas
-    inFasilitasHotel := <-checkInFasilitasHotel
-	
-	if !hotelExists && !fasilitasExists  {
-		return libs.ResponseError(c, "Hotel and Fasilitas not found", 404)
-	}
-    if !hotelExists {
-        return libs.ResponseError(c, "Hotel not found", 404)
-    }
-    if !fasilitasExists {
-        return libs.ResponseError(c, "Fasilitas not found", 404)
-    }
-    if inFasilitasHotel {
-        return libs.ResponseError(c, "Fasilitas hotel already exist", 400)
-    }
-	
+	// hotelExists := <-checkHotel
+	// fasilitasExists := <-checkFasilitas
+	// inFasilitasHotel := <-checkInFasilitasHotel
+
+	// if !hotelExists && !fasilitasExists  {
+	// 	return libs.ResponseError(c, "Hotel and Fasilitas not found", 404)
+	// }
+	// if !hotelExists {
+	//     return libs.ResponseError(c, "Hotel not found", 404)
+	// }
+	// if !fasilitasExists {
+	//     return libs.ResponseError(c, "Fasilitas not found", 404)
+	// }
+	// if inFasilitasHotel {
+	//     return libs.ResponseError(c, "Fasilitas hotel already exist", 400)
+	// }
+
 	if err := databases.DB.Table("fasilitas_hotel").Create(&fasilitasHotel); err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
 	}
 	return libs.ResponseSuccess(c, "Success create fasilitas hotel", 201)
 }
 
-func checkFasilitasHotelIsExist(hotel_id int, fasilitas_id int, wg *sync.WaitGroup,ch chan bool)  {
-	var fasilitasHotel []FasilitasHotel
-	defer wg.Done()
-	if err := databases.DB.Table("fasilitas_hotel").Where("hotel_id = ? AND fasilitas_id = ?", hotel_id, fasilitas_id).Find(&fasilitasHotel); err.Error != nil {
-		ch <- false		
-		return 
-	} else if len(fasilitasHotel) != 0 {		
-		ch <- true
-		return
-	} 
-	
-}
+// func checkFasilitasHotelIsExist(hotel_id int, fasilitas_id int, wg *sync.WaitGroup, ch chan bool) {
+// 	var fasilitasHotel []FasilitasHotel
+// 	defer wg.Done()
+// 	if err := databases.DB.Table("fasilitas_hotel").Where("hotel_id = ? AND fasilitas_id = ?", hotel_id, fasilitas_id).Find(&fasilitasHotel); err.Error != nil {
+// 		ch <- false
+// 		return
+// 	} else if len(fasilitasHotel) != 0 {
+// 		ch <- true
+// 		return
+// 	}
 
-func checkIsHotelExist(hotel_id int, wg *sync.WaitGroup, ch chan bool) {
-	var hotel hotel.Hotel
-	defer wg.Done()
-	if err := databases.DB.Table("hotel").First(&hotel, hotel_id); err.Error != nil {
-		ch <- false
-		return
-	} else if err.RowsAffected == 0 {
-		ch <- false
-		return
-	} else {
-		ch <- true
-		return
-	}	
-}
+// }
 
-func checkIsFasilitasExist(fasilitas_id int, wg *sync.WaitGroup, ch chan bool) {
-	var fasilitas fasilitas.Fasilitas
-	defer wg.Done()
-	if err := databases.DB.Table("fasilitas").First(&fasilitas, fasilitas_id); err.Error != nil {
-		ch <- false
-		return
-	} else if err.RowsAffected == 0 {
-		ch <- false
-		return
-	} else {
-		ch <- true
-		return
-	}
-}
+// func checkIsHotelExist(hotel_id int, wg *sync.WaitGroup, ch chan bool) {
+// 	var hotel hotel.Hotel
+// 	defer wg.Done()
+// 	if err := databases.DB.Table("hotel").First(&hotel, hotel_id); err.Error != nil {
+// 		ch <- false
+// 		return
+// 	} else if err.RowsAffected == 0 {
+// 		ch <- false
+// 		return
+// 	} else {
+// 		ch <- true
+// 		return
+// 	}
+// }
+
+// func checkIsFasilitasExist(fasilitas_id int, wg *sync.WaitGroup, ch chan bool) {
+// 	var fasilitas fasilitas.Fasilitas
+// 	defer wg.Done()
+// 	if err := databases.DB.Table("fasilitas").First(&fasilitas, fasilitas_id); err.Error != nil {
+// 		ch <- false
+// 		return
+// 	} else if err.RowsAffected == 0 {
+// 		ch <- false
+// 		return
+// 	} else {
+// 		ch <- true
+// 		return
+// 	}
+// }
 
 func GetAllFasilitasHotel(c *fiber.Ctx) error {
-	var fasilitasHotel []FasilitasHotel
-	if err := databases.DB.Table("fasilitas_hotel").Find(&fasilitasHotel).Error; err != nil {
+	var fasilitasHotel []ResponseFasilitasHotel
+	if err := databases.DB.Preload("Hotel").Preload("Fasilitas").Table("fasilitas_hotel").Find(&fasilitasHotel).Error; err != nil {
 		return libs.ResponseError(c, err.Error(), 400)
 	}
 	return libs.ResponseSuccess(c, fasilitasHotel, 200)
 }
 
 func GetFasilitasHotelById(c *fiber.Ctx) error {
-	fasilitasHotel := FasilitasHotel{}
+	fasilitasHotel := ResponseFasilitasHotel{}
 	id := c.Params("id")
-	err := databases.DB.Table("fasilitas_hotel").First(&fasilitasHotel, id)
+	err := databases.DB.Preload("Hotel").Preload("Fasilitas").Table("fasilitas_hotel").First(&fasilitasHotel, id)
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
 	}
@@ -156,42 +153,42 @@ func UpdateFasilitasHotel(c *fiber.Ctx) error {
 	}
 	id := c.Params("id")
 
-	checkHotel := make(chan bool)
-	checkFasilitas := make(chan bool)
-	checkInFasilitasHotel := make(chan bool)
-	var wg sync.WaitGroup
-	wg.Add(1)
-    go checkFasilitasHotelIsExist(fasilitasHotel.Hotel_id, fasilitasHotel.Fasilitas_id, &wg, checkInFasilitasHotel)
+	// checkHotel := make(chan bool)
+	// checkFasilitas := make(chan bool)
+	// checkInFasilitasHotel := make(chan bool)
+	// var wg sync.WaitGroup
+	// wg.Add(1)
+	// go checkFasilitasHotelIsExist(fasilitasHotel.Hotel_id, fasilitasHotel.Fasilitas_id, &wg, checkInFasilitasHotel)
 
-    wg.Add(1)
-    go checkIsFasilitasExist(fasilitasHotel.Fasilitas_id, &wg, checkFasilitas)
+	// wg.Add(1)
+	// go checkIsFasilitasExist(fasilitasHotel.Fasilitas_id, &wg, checkFasilitas)
 
-    wg.Add(1)
-    go checkIsHotelExist(fasilitasHotel.Hotel_id, &wg, checkHotel)
+	// wg.Add(1)
+	// go checkIsHotelExist(fasilitasHotel.Hotel_id, &wg, checkHotel)
 
-	go func() {
-        wg.Wait()
-        close(checkHotel)
-        close(checkFasilitas)
-        close(checkInFasilitasHotel)
-    }()
+	// go func() {
+	// 	wg.Wait()
+	// 	close(checkHotel)
+	// 	close(checkFasilitas)
+	// 	close(checkInFasilitasHotel)
+	// }()
 
-    hotelExists := <-checkHotel
-    fasilitasExists := <-checkFasilitas
-    inFasilitasHotel := <-checkInFasilitasHotel
+	// hotelExists := <-checkHotel
+	// fasilitasExists := <-checkFasilitas
+	// inFasilitasHotel := <-checkInFasilitasHotel
 
-	if !hotelExists && !fasilitasExists  {
-		return libs.ResponseError(c, "Hotel and Fasilitas not found", 404)
-	}
-    if !hotelExists {
-        return libs.ResponseError(c, "Hotel not found", 404)
-    }
-    if !fasilitasExists {
-        return libs.ResponseError(c, "Fasilitas not found", 404)
-    }
-    if inFasilitasHotel {
-        return libs.ResponseError(c, "Fasilitas hotel already exist", 400)
-    }
+	// if !hotelExists && !fasilitasExists {
+	// 	return libs.ResponseError(c, "Hotel and Fasilitas not found", 404)
+	// }
+	// if !hotelExists {
+	// 	return libs.ResponseError(c, "Hotel not found", 404)
+	// }
+	// if !fasilitasExists {
+	// 	return libs.ResponseError(c, "Fasilitas not found", 404)
+	// }
+	// if inFasilitasHotel {
+	// 	return libs.ResponseError(c, "Fasilitas hotel already exist", 400)
+	// }
 
 	err := databases.DB.Table("fasilitas_hotel").Where("fasilitas_hotel_id = ?", id).Updates(&fasilitasHotel)
 	if err.Error != nil {
@@ -220,4 +217,27 @@ func DeleteFasilitasHotel(c *fiber.Ctx) error {
 		return libs.ResponseError(c, "Data not found", 404)
 	}
 	return libs.ResponseSuccess(c, "Success delete fasilitas hotel", 200)
+}
+
+func GetFasilitasByHotelId(c *fiber.Ctx) error {
+	id := c.Params("id")
+	var fasilitasHotel []ResponseFasilitasHotel
+	if err := databases.DB.Preload("Fasilitas").Preload("Hotel").Table("fasilitas_hotel").Where("hotel_id = ?", id).Find(&fasilitasHotel).Error; err != nil {
+		return libs.ResponseError(c, err.Error(), 400)
+	} else if len(fasilitasHotel) == 0 {
+		return libs.ResponseError(c, "Data not found", 404)
+	}
+	return libs.ResponseSuccess(c, fasilitasHotel, 200)
+}
+
+func GetFasilitasByFasilitasId(c *fiber.Ctx) error {
+	id := c.Params("id")
+	var fasilitasHotel []ResponseFasilitasHotel
+	if err := databases.DB.Preload("Fasilitas").Preload("Hotel").Table("fasilitas_hotel").Where("fasilitas_id = ?", id).Find(&fasilitasHotel).Error; err != nil {
+		return libs.ResponseError(c, err.Error(), 400)
+	} else if len(fasilitasHotel) == 0 {
+		return libs.ResponseError(c, "Data not found", 404)
+	}
+
+	return libs.ResponseSuccess(c, fasilitasHotel, 200)
 }
