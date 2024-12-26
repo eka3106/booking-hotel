@@ -1,10 +1,3 @@
-CREATE TABLE status_pembayaran (
-    status_pembayaran_id SERIAL PRIMARY KEY,
-    status_pembayaran VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE status_booking (
     status_booking_id SERIAL PRIMARY KEY,
     status_booking_nama VARCHAR(255) NOT NULL,
@@ -111,9 +104,7 @@ CREATE TABLE pembayaran (
     pembayaran_id SERIAL PRIMARY KEY,
     booking_id INT NOT NULL,
     total_pembayaran INT NOT NULL,
-    tanggal_pembayaran TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    status_pembayaran_id INT NOT NULL,    
+    tanggal_pembayaran TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 
     FOREIGN KEY (booking_id)  REFERENCES booking(booking_id),    
-    FOREIGN KEY (status_pembayaran_id) REFERENCES status_pembayaran(status_pembayaran_id)    
 );

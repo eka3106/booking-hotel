@@ -180,6 +180,7 @@ func UpdateAdminBooking(c *fiber.Ctx) error {
 		} else {
 			ch <- true
 		}
+		defer wg.Done()
 	}(updateKamar, booking.Status_kamar_id)
 	go func() {
 		wg.Wait()

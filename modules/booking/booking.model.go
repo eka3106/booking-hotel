@@ -45,3 +45,7 @@ type InsertBooking struct {
 	Tanggal_check_out string `json:"tanggal_check_out"`
 	Status_booking_id int    `json:"status_booking_id" validate:"required"`
 }
+
+func (Booking) TableName() string {
+	return "booking"
+}

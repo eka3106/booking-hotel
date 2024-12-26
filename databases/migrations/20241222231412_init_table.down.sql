@@ -9,4 +9,3 @@ DROP TABLE IF EXISTS hotel;
 DROP TABLE IF EXISTS tipe_kamar;
 DROP TABLE IF EXISTS status_kamar;
 DROP TABLE IF EXISTS status_booking;
-DROP TABLE IF EXISTS status_pembayaran;
