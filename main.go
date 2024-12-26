@@ -11,7 +11,6 @@ import (
 	"booking-hotel/modules/hotel"
 	"booking-hotel/modules/kamar"
 	"booking-hotel/modules/pembayaran"
-	"booking-hotel/modules/rating"
 	statusbooking "booking-hotel/modules/statusBooking"
 	statuskamar "booking-hotel/modules/statusKamar"
 	tipekamar "booking-hotel/modules/tipeKamar"
@@ -35,7 +34,6 @@ func main() {
 	hotel.RouterHotel(fiberApp)
 	kamar.RouterKamar(fiberApp)
 	pembayaran.RouterPembayaran(fiberApp)
-	rating.RouterRating(fiberApp)
 	statusbooking.RouterStatusBooking(fiberApp)
 	statuskamar.RouterStatusKamar(fiberApp)
 	tipekamar.RouterTipeKamar(fiberApp)
