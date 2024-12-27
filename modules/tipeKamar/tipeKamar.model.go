@@ -12,3 +12,7 @@ type TipeKamar struct {
 type RequestTipeKamar struct {
 	Tipe_kamar_nama string `json:"tipe_kamar_nama" validate:"required"`
 }
+
+func (TipeKamar) TableName() string {
+	return "tipe_kamar"
+}

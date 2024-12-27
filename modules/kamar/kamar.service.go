@@ -62,10 +62,18 @@ func CreateKamar(c *fiber.Ctx) error {
 // @Router /1.0/kamar [get]
 func GetAllKamar(c *fiber.Ctx) error {
 	var kamar []ResponseKamar
-	if err := databases.DB.Preload("Status_kamar").Table("kamar").Find(&kamar).Error; err != nil {
-		return libs.ResponseError(c, err.Error(), 400)
+	status_kamar := c.Query("status_kamar")
+	if status_kamar != "" {
+		if err := databases.DB.Preload("Hotel").Preload("Tipe_kamar").Preload("Status_kamar").Table("kamar").Where("kamar.status_kamar_id = ?", status_kamar).Find(&kamar).Error; err != nil {
+			return libs.ResponseError(c, err.Error(), 400)
+		}
+		return libs.ResponseSuccess(c, kamar, 200)
+		} else {
+		if err := databases.DB.Preload("Hotel").Preload("Tipe_kamar").Preload("Status_kamar").Table("kamar").Find(&kamar).Error; err != nil {
+			return libs.ResponseError(c, err.Error(), 400)
+		}
+		return libs.ResponseSuccess(c, kamar, 200)
 	}
-	return libs.ResponseSuccess(c, kamar, 200)
 }
 
 // GetKamarById godoc
@@ -80,7 +88,7 @@ func GetAllKamar(c *fiber.Ctx) error {
 func GetKamarById(c *fiber.Ctx) error {
 	kamar := ResponseKamar{}
 	id := c.Params("id")
-	err := databases.DB.Preload("Status_kamar").Table("kamar").First(&kamar, id)
+	err := databases.DB.Preload("Hotel").Preload("Tipe_kamar").Preload("Status_kamar").Table("kamar").First(&kamar, id)
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
 	}
@@ -179,9 +187,9 @@ func DeleteKamar(c *fiber.Ctx) error {
 // @Success 200 {object} Kamar
 // @Router /1.0/kamar/hotel/{id} [get]
 func GetKamarByIdHotel(c *fiber.Ctx) error {
-	kamar := []Kamar{}
+	kamar := []ResponseKamar{}
 	id := c.Params("id")
-	err := databases.DB.Preload("Status_kamar").Table("kamar").Where("hotel_id = ?", id).Find(&kamar)
+	err := databases.DB.Preload("Hotel").Preload("Tipe_kamar").Preload("Status_kamar").Table("kamar").Where("hotel_id = ?", id).Find(&kamar)
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
 	}
