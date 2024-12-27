@@ -17,7 +17,6 @@ func init() {
 		fmt.Println("Error reading config file", err)
 	}
 
-	viper.SetDefault("PORT", os.Getenv("PORT"))
 	viper.SetDefault("DB_HOST", os.Getenv("DB_HOST"))
 	viper.SetDefault("DB_PORT", os.Getenv("DB_PORT"))
 	viper.SetDefault("DB_USER", os.Getenv("DB_USER"))
