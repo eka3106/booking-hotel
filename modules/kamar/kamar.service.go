@@ -62,18 +62,23 @@ func CreateKamar(c *fiber.Ctx) error {
 // @Router /1.0/kamar [get]
 func GetAllKamar(c *fiber.Ctx) error {
 	var kamar []ResponseKamar
+	query := databases.DB.Preload("Hotel").Preload("Tipe_kamar").Preload("Status_kamar").Table("kamar")
 	status_kamar := c.Query("status_kamar")
+	price := c.Query("price")
+	tipe_kamar := c.Query("tipe_kamar")
 	if status_kamar != "" {
-		if err := databases.DB.Preload("Hotel").Preload("Tipe_kamar").Preload("Status_kamar").Table("kamar").Where("kamar.status_kamar_id = ?", status_kamar).Find(&kamar).Error; err != nil {
-			return libs.ResponseError(c, err.Error(), 400)
-		}
-		return libs.ResponseSuccess(c, kamar, 200)
-		} else {
-		if err := databases.DB.Preload("Hotel").Preload("Tipe_kamar").Preload("Status_kamar").Table("kamar").Find(&kamar).Error; err != nil {
-			return libs.ResponseError(c, err.Error(), 400)
-		}
-		return libs.ResponseSuccess(c, kamar, 200)
+		query = query.Where("status_kamar_id = ?", status_kamar)
 	}
+	if price != "" {
+		query = query.Where("harga <= ?", price)
+	}
+	if tipe_kamar != "" {
+		query = query.Where("tipe_kamar_id = ?", tipe_kamar)
+	}
+	if err := query.Find(&kamar).Error; err != nil {
+		return libs.ResponseError(c, err.Error(), 400)
+	}
+	return libs.ResponseSuccess(c, kamar, 200)
 }
 
 // GetKamarById godoc
