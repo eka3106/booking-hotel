@@ -9,7 +9,7 @@ import (
 
 func init() {
 
-	viper.SetConfigFile(".env")
+	// viper.SetConfigFile(".env")
 
 	viper.AutomaticEnv()
 
