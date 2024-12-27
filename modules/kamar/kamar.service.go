@@ -58,6 +58,10 @@ func CreateKamar(c *fiber.Ctx) error {
 // @Tags Kamar
 // @Accept json
 // @Produce json
+// @Param status_kamar query string false "Status Kamar"
+// @Param price query string false "Price"
+// @Param tipe_kamar query string false "Tipe Kamar"
+// @Param id_hotel query string false "ID Hotel"
 // @Success 200 {object} Kamar
 // @Router /1.0/kamar [get]
 func GetAllKamar(c *fiber.Ctx) error {
@@ -66,6 +70,7 @@ func GetAllKamar(c *fiber.Ctx) error {
 	status_kamar := c.Query("status_kamar")
 	price := c.Query("price")
 	tipe_kamar := c.Query("tipe_kamar")
+	id_hotel := c.Query("id_hotel")
 	if status_kamar != "" {
 		query = query.Where("status_kamar_id = ?", status_kamar)
 	}
@@ -74,6 +79,9 @@ func GetAllKamar(c *fiber.Ctx) error {
 	}
 	if tipe_kamar != "" {
 		query = query.Where("tipe_kamar_id = ?", tipe_kamar)
+	}
+	if id_hotel != "" {
+		query = query.Where("hotel_id = ?", id_hotel)
 	}
 	if err := query.Find(&kamar).Error; err != nil {
 		return libs.ResponseError(c, err.Error(), 400)
@@ -182,21 +190,3 @@ func DeleteKamar(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Success delete kamar", 200)
 }
 
-// GetKamarByIdHotel godoc
-// @Summary Get Kamar By ID Hotel
-// @Description Get Kamar By ID Hotel
-// @Tags Kamar
-// @Accept json
-// @Produce json
-// @Param id path int true "Hotel ID"
-// @Success 200 {object} Kamar
-// @Router /1.0/kamar/hotel/{id} [get]
-func GetKamarByIdHotel(c *fiber.Ctx) error {
-	kamar := []ResponseKamar{}
-	id := c.Params("id")
-	err := databases.DB.Preload("Hotel").Preload("Tipe_kamar").Preload("Status_kamar").Table("kamar").Where("hotel_id = ?", id).Find(&kamar)
-	if err.Error != nil {
-		return libs.ResponseError(c, err.Error.Error(), 400)
-	}
-	return libs.ResponseSuccess(c, kamar, 200)
-}
