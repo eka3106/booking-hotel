@@ -13,6 +13,16 @@ import (
 
 var validate = validator.New()
 
+// CreateBooking godoc
+// @Summary Create Booking
+// @Description Create Booking
+// @Tags Booking
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param CreateBooking body RequestCreateBookingSwagger true "Create Booking"
+// @Success 201 {string} string "Success Create Booking"
+// @Router /1.0/booking [post]
 func CreateBooking(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -66,6 +76,15 @@ func CreateBooking(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Success create booking", 201)
 }
 
+// GetAllBookingByUser godoc
+// @Summary Get All Booking
+// @Description Get All Booking
+// @Tags Booking
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} Booking
+// @Router /1.0/booking [get]
 func GetAllBookingByUser(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -78,6 +97,15 @@ func GetAllBookingByUser(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, booking, 200)
 }
 
+// GetAllBookingByAdminHotel godoc
+// @Summary Get All Booking on Hotel
+// @Description Get All Booking on Hotel harus admin hotel
+// @Tags Booking
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} Booking
+// @Router /1.0/booking/admin [get]
 func GetAllBookingByAdminHotel(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -93,14 +121,24 @@ func GetAllBookingByAdminHotel(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, booking, 200)
 }
 
-func GetBookingUserById(c *fiber.Ctx) error {
+// GetBookingById godoc
+// @Summary Get Booking By Id
+// @Description Get Booking By Id
+// @Tags Booking
+// @Accept json
+// @Produce json
+// @Param id path int true "Booking ID"
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} Booking
+// @Router /1.0/booking/{id} [get]
+func GetBookingById(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
 	}
 	booking := Booking{}
 	id := c.Params("id")
-	err := databases.DB.Preload("Status_booking").Table("booking").Where("user_id = ?", claims.(*user.Claims).User_id).First(&booking, id)
+	err := databases.DB.Preload("Status_booking").Table("booking").First(&booking, id)
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
 	}
@@ -113,26 +151,16 @@ func GetBookingUserById(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, booking, 200)
 }
 
-func GetBookingHotelById(c *fiber.Ctx) error {
-	claims := c.Locals("user")
-	if claims == nil {
-		return libs.ResponseError(c, "Unauthorized", 401)
-	}
-	if claims.(*user.Claims).Hak_akses_id != 3 {
-		return libs.ResponseError(c, "Forbidden", 403)
-	}
-	booking := Booking{}
-	id := c.Params("id")
-	err := databases.DB.Table("booking").First(&booking, id)
-	if err.Error != nil {
-		return libs.ResponseError(c, err.Error.Error(), 400)
-	}
-	if err.RowsAffected == 0 {
-		return libs.ResponseError(c, "Data not found", 404)
-	}
-	return libs.ResponseSuccess(c, booking, 200)
-}
-
+// UpdateAdminBooking godoc
+// @Summary Update Booking
+// @Description Update Booking
+// @Tags Booking
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param UpdateBooking body RequestUpdateBooking true "Update Booking"
+// @Success 200 {string} string "Success Update Booking"
+// @Router /1.0/booking/proses-reservasi [patch]
 func UpdateAdminBooking(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {

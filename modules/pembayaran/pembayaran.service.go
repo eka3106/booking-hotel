@@ -99,6 +99,7 @@ func GetAllPembayaran(c *fiber.Ctx) error {
 // @Param Authorization header string true "Bearer"
 // @Param id path int true "ID Pembayaran"
 // @Success 200 {object} ResponsePembayaran
+// @Router /1.0/pembayaran/{id} [get]
 func GetPembayaranById(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {

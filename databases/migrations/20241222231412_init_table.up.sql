@@ -106,5 +106,5 @@ CREATE TABLE pembayaran (
     total_pembayaran INT NOT NULL,
     tanggal_pembayaran TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 
-    FOREIGN KEY (booking_id)  REFERENCES booking(booking_id),    
+    FOREIGN KEY (booking_id)  REFERENCES booking(booking_id)    
 );

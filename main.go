@@ -26,7 +26,7 @@ import (
 // @version 1.0
 // @description API untuk reservasi hotel
 // @description To access the API, you need to register and login first
-// @BasePath /api/1.0
+// @BasePath /api
 // @securityDefinitions.api_key Bearer:
 // @in header
 // @name Authorization
@@ -35,6 +35,9 @@ func main() {
 	defer databases.SqlDb.Close()
 
 	fiberApp := fiber.New()
+	fiberApp.Get("/", func(c *fiber.Ctx) error {
+		return c.Redirect("/docs/index.html")
+	})
 	fiberApp.Use(cors.New())
 	fiberApp.Get("/docs/*", swagger.HandlerDefault)
 	fiberApp.Use(middleware.AuthJWT())

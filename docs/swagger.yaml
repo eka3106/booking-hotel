@@ -1,4 +1,4 @@
-basePath: /api/1.0
+basePath: /api
 definitions:
   booking.Booking:
     properties:
@@ -32,6 +32,150 @@ definitions:
     - status_booking_id
     - total_biaya
     - user_id
+    type: object
+  booking.RequestCreateBookingSwagger:
+    properties:
+      kamar_id:
+        type: integer
+      user_id:
+        type: integer
+    required:
+    - kamar_id
+    type: object
+  booking.RequestUpdateBooking:
+    properties:
+      booking_id:
+        type: integer
+      kamar_id:
+        type: integer
+      status_booking_id:
+        type: integer
+    required:
+    - booking_id
+    - kamar_id
+    - status_booking_id
+    type: object
+  fasilitas.Fasilitas:
+    properties:
+      created_at:
+        type: string
+      deskripsi:
+        minLength: 10
+        type: string
+      fasilitas_id:
+        type: integer
+      jenis_fasilitas:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - deskripsi
+    - jenis_fasilitas
+    type: object
+  fasilitas.RequestFasilitas:
+    properties:
+      deskripsi:
+        minLength: 10
+        type: string
+      jenis_fasilitas:
+        type: string
+    required:
+    - deskripsi
+    - jenis_fasilitas
+    type: object
+  fasilitashotel.RequestFasilitasHotel:
+    properties:
+      fasilitas_id:
+        type: integer
+      hotel_id:
+        type: integer
+    required:
+    - fasilitas_id
+    - hotel_id
+    type: object
+  fasilitashotel.ResponseFasilitasHotel:
+    properties:
+      fasilitas:
+        $ref: '#/definitions/fasilitas.Fasilitas'
+      fasilitas_hotel_id:
+        type: integer
+      fasilitas_id:
+        type: integer
+      hotel:
+        $ref: '#/definitions/hotel.Hotel'
+      hotel_id:
+        type: integer
+    required:
+    - fasilitas_id
+    - hotel_id
+    type: object
+  hakakses.HakAkses:
+    properties:
+      created_at:
+        type: string
+      hak_akses:
+        maxLength: 50
+        minLength: 3
+        type: string
+      hak_akses_id:
+        type: integer
+      updated_at:
+        type: string
+    required:
+    - hak_akses
+    type: object
+  hakakses.RequestHakAkses:
+    properties:
+      hak_akses:
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - hak_akses
+    type: object
+  hotel.Hotel:
+    properties:
+      alamat_hotel:
+        minLength: 10
+        type: string
+      created_at:
+        type: string
+      email_hotel:
+        type: string
+      hotel_id:
+        type: integer
+      nama_hotel:
+        minLength: 3
+        type: string
+      telp_hotel:
+        minLength: 10
+        type: string
+      updated_at:
+        type: string
+    required:
+    - alamat_hotel
+    - email_hotel
+    - nama_hotel
+    - telp_hotel
+    type: object
+  hotel.RequestHotel:
+    properties:
+      alamat_hotel:
+        minLength: 10
+        type: string
+      email_hotel:
+        type: string
+      nama_hotel:
+        minLength: 3
+        type: string
+      telp_hotel:
+        minLength: 10
+        type: string
+    required:
+    - alamat_hotel
+    - email_hotel
+    - nama_hotel
+    - telp_hotel
     type: object
   kamar.Kamar:
     properties:
@@ -217,6 +361,641 @@ info:
   title: Reservasi Hotel API
   version: "1.0"
 paths:
+  /1.0/booking:
+    get:
+      consumes:
+      - application/json
+      description: Get All Booking
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/booking.Booking'
+      summary: Get All Booking
+      tags:
+      - Booking
+    post:
+      consumes:
+      - application/json
+      description: Create Booking
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Booking
+        in: body
+        name: CreateBooking
+        required: true
+        schema:
+          $ref: '#/definitions/booking.RequestCreateBookingSwagger'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success Create Booking
+          schema:
+            type: string
+      summary: Create Booking
+      tags:
+      - Booking
+  /1.0/booking/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Booking By Id
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/booking.Booking'
+      summary: Get Booking By Id
+      tags:
+      - Booking
+  /1.0/booking/admin:
+    get:
+      consumes:
+      - application/json
+      description: Get All Booking on Hotel harus admin hotel
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/booking.Booking'
+      summary: Get All Booking on Hotel
+      tags:
+      - Booking
+  /1.0/booking/proses-reservasi:
+    patch:
+      consumes:
+      - application/json
+      description: Update Booking
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Update Booking
+        in: body
+        name: UpdateBooking
+        required: true
+        schema:
+          $ref: '#/definitions/booking.RequestUpdateBooking'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Update Booking
+          schema:
+            type: string
+      summary: Update Booking
+      tags:
+      - Booking
+  /1.0/fasilitas:
+    get:
+      consumes:
+      - application/json
+      description: Get All Fasilitas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/fasilitas.Fasilitas'
+      summary: Get All Fasilitas
+      tags:
+      - Fasilitas
+    post:
+      consumes:
+      - application/json
+      description: Create Fasilitas
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Fasilitas
+        in: body
+        name: CreateFasilitas
+        required: true
+        schema:
+          $ref: '#/definitions/fasilitas.RequestFasilitas'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success Create Fasilitas
+          schema:
+            type: string
+      summary: Create Fasilitas
+      tags:
+      - Fasilitas
+  /1.0/fasilitas-hotel:
+    get:
+      consumes:
+      - application/json
+      description: Get All Fasilitas Hotel
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/fasilitashotel.ResponseFasilitasHotel'
+      summary: Get All Fasilitas Hotel
+      tags:
+      - Fasilitas Hotel
+    post:
+      consumes:
+      - application/json
+      description: Create Fasilitas Hotel
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Fasilitas Hotel
+        in: body
+        name: CreateFasilitasHotel
+        required: true
+        schema:
+          $ref: '#/definitions/fasilitashotel.RequestFasilitasHotel'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success Create Fasilitas Hotel
+          schema:
+            type: string
+      summary: Create Fasilitas Hotel
+      tags:
+      - Fasilitas Hotel
+  /1.0/fasilitas-hotel/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Fasilitas Hotel
+      parameters:
+      - description: Fasilitas Hotel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Delete Fasilitas Hotel
+          schema:
+            type: string
+      summary: Delete Fasilitas Hotel
+      tags:
+      - Fasilitas Hotel
+    get:
+      consumes:
+      - application/json
+      description: Get Fasilitas Hotel By Id
+      parameters:
+      - description: Fasilitas Hotel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/fasilitashotel.ResponseFasilitasHotel'
+      summary: Get Fasilitas Hotel By Id
+      tags:
+      - Fasilitas Hotel
+    put:
+      consumes:
+      - application/json
+      description: Update Fasilitas Hotel
+      parameters:
+      - description: Fasilitas Hotel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Update Fasilitas Hotel
+        in: body
+        name: UpdateFasilitasHotel
+        required: true
+        schema:
+          $ref: '#/definitions/fasilitashotel.RequestFasilitasHotel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Update Fasilitas Hotel
+          schema:
+            type: string
+      summary: Update Fasilitas Hotel
+      tags:
+      - Fasilitas Hotel
+  /1.0/fasilitas-hotel/by-fasilitas/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Fasilitas By Fasilitas Id
+      parameters:
+      - description: Fasilitas ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/fasilitashotel.ResponseFasilitasHotel'
+      summary: Get Fasilitas By Fasilitas Id
+      tags:
+      - Fasilitas Hotel
+  /1.0/fasilitas-hotel/by-hotel/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Fasilitas By Hotel Id
+      parameters:
+      - description: Hotel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/fasilitashotel.ResponseFasilitasHotel'
+      summary: Get Fasilitas By Hotel Id
+      tags:
+      - Fasilitas Hotel
+  /1.0/fasilitas/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Fasilitas
+      parameters:
+      - description: Fasilitas ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Delete Fasilitas
+          schema:
+            type: string
+      summary: Delete Fasilitas
+      tags:
+      - Fasilitas
+    get:
+      consumes:
+      - application/json
+      description: Get Fasilitas By Id
+      parameters:
+      - description: Fasilitas ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/fasilitas.Fasilitas'
+      summary: Get Fasilitas By Id
+      tags:
+      - Fasilitas
+    put:
+      consumes:
+      - application/json
+      description: Update Fasilitas
+      parameters:
+      - description: Fasilitas ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Update Fasilitas
+        in: body
+        name: UpdateFasilitas
+        required: true
+        schema:
+          $ref: '#/definitions/fasilitas.RequestFasilitas'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Update Fasilitas
+          schema:
+            type: string
+      summary: Update Fasilitas
+      tags:
+      - Fasilitas
+  /1.0/hak-akses:
+    get:
+      consumes:
+      - application/json
+      description: Get All Hak Akses
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hakakses.HakAkses'
+      summary: Get All Hak Akses
+      tags:
+      - Hak Akses
+    post:
+      consumes:
+      - application/json
+      description: Create Hak Akses
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Hak Akses
+        in: body
+        name: CreateHakAkses
+        required: true
+        schema:
+          $ref: '#/definitions/hakakses.RequestHakAkses'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success Create Hak Akses
+          schema:
+            type: string
+      summary: Create Hak Akses
+      tags:
+      - Hak Akses
+  /1.0/hak-akses/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Hak Akses
+      parameters:
+      - description: Hak Akses ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Delete Hak Akses
+          schema:
+            type: string
+      summary: Delete Hak Akses
+      tags:
+      - Hak Akses
+    get:
+      consumes:
+      - application/json
+      description: Get Hak Akses By Id
+      parameters:
+      - description: Hak Akses ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hakakses.HakAkses'
+      summary: Get Hak Akses By Id
+      tags:
+      - Hak Akses
+    put:
+      consumes:
+      - application/json
+      description: Update Hak Akses
+      parameters:
+      - description: Hak Akses ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Update Hak Akses
+        in: body
+        name: UpdateHakAkses
+        required: true
+        schema:
+          $ref: '#/definitions/hakakses.RequestHakAkses'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Update Hak Akses
+          schema:
+            type: string
+      summary: Update Hak Akses
+      tags:
+      - Hak Akses
+  /1.0/hotel:
+    get:
+      consumes:
+      - application/json
+      description: Get All Hotel
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hotel.Hotel'
+      summary: Get All Hotel
+      tags:
+      - Hotel
+    post:
+      consumes:
+      - application/json
+      description: Create Hotel
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Hotel
+        in: body
+        name: CreateHotel
+        required: true
+        schema:
+          $ref: '#/definitions/hotel.RequestHotel'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success Create Hotel
+          schema:
+            type: string
+      summary: Create Hotel
+      tags:
+      - Hotel
+  /1.0/hotel/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Hotel
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Hotel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Delete Hotel
+          schema:
+            type: string
+      summary: Delete Hotel
+      tags:
+      - Hotel
+    get:
+      consumes:
+      - application/json
+      description: Get Hotel By ID
+      parameters:
+      - description: Hotel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hotel.Hotel'
+      summary: Get Hotel By ID
+      tags:
+      - Hotel
+    put:
+      consumes:
+      - application/json
+      description: Update Hotel
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Hotel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Hotel
+        in: body
+        name: UpdateHotel
+        required: true
+        schema:
+          $ref: '#/definitions/hotel.RequestHotel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Update Hotel
+          schema:
+            type: string
+      summary: Update Hotel
+      tags:
+      - Hotel
   /1.0/kamar:
     get:
       consumes:
@@ -419,6 +1198,32 @@ paths:
       summary: Create Pembayaran
       tags:
       - Pembayaran
+  /1.0/pembayaran/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Pembayaran By ID
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID Pembayaran
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pembayaran.ResponsePembayaran'
+      summary: Get Pembayaran By ID
+      tags:
+      - Pembayaran
   /1.0/register:
     post:
       consumes:
@@ -594,6 +1399,32 @@ paths:
           schema:
             $ref: '#/definitions/statuskamar.StatusKamar'
       summary: Get All Status Kamar
+      tags:
+      - Status Kamar
+    post:
+      consumes:
+      - application/json
+      description: Create Status Kamar
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Create Status Kamar
+        in: body
+        name: CreateStatusKamar
+        required: true
+        schema:
+          $ref: '#/definitions/statuskamar.RequestStatusKamar'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success Create Status Kamar
+          schema:
+            type: string
+      summary: Create Status Kamar
       tags:
       - Status Kamar
   /1.0/status-kamar/{id}:

@@ -29,6 +29,11 @@ type RequestCreateBooking struct {
 	Status_booking_id int `json:"status_booking_id"`
 }
 
+type RequestCreateBookingSwagger struct {
+	Kamar_id          int `json:"kamar_id" validate:"required"`
+	Jumlah_hari           int `json:"user_id"`
+}
+
 type RequestAdmin struct {
 	Booking_id        int    `json:"booking_id" validate:"required"`
 	Kamar_id          int    `json:"kamar_id" validate:"required"`
@@ -36,6 +41,12 @@ type RequestAdmin struct {
 	Tanggal_check_out string `json:"tanggal_check_out"`
 	Status_booking_id int    `json:"status_booking_id" validate:"required"`
 	Status_kamar_id   int    `json:"status_kamar_id"`
+}
+
+type RequestUpdateBooking struct {
+	Booking_id        int    `json:"booking_id" validate:"required"`
+	Kamar_id          int    `json:"kamar_id" validate:"required"`
+	Status_booking_id int    `json:"status_booking_id" validate:"required"`
 }
 
 type InsertBooking struct {

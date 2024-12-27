@@ -20,6 +20,7 @@ var validate = validator.New()
 // @Param Authorization header string true "Bearer"
 // @Param CreateStatusKamar body RequestStatusKamar true "Create Status Kamar"
 // @Success 201 {string} string "Success Create Status Kamar"
+// @Router /1.0/status-kamar [post]
 func CreateStatusKamar(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {

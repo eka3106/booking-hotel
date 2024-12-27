@@ -26,3 +26,10 @@ type ResponseHotel struct {
 func (Hotel) TableName() string {
 	return "hotel"
 }
+
+type RequestHotel struct {
+	Nama_hotel   string `json:"nama_hotel" gorm:"type:varchar(255)" validate:"required,min=3"`
+	Alamat_hotel string `json:"alamat_hotel" gorm:"type:varchar(255)" validate:"required,min=10"`
+	Telp_hotel   string `json:"telp_hotel" gorm:"type:varchar(255)" validate:"required,min=10"`
+	Email_hotel  string `json:"email_hotel" gorm:"type:varchar(255)" validate:"required,email"`
+}

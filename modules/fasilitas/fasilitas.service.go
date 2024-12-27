@@ -11,6 +11,17 @@ import (
 
 var validate = validator.New()
 
+
+// CreateFasilitas godoc
+// @Summary Create Fasilitas
+// @Description Create Fasilitas
+// @Tags Fasilitas
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param CreateFasilitas body RequestFasilitas true "Create Fasilitas"
+// @Success 201 {string} string "Success Create Fasilitas"
+// @Router /1.0/fasilitas [post]
 func CreateFasilitas(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -38,6 +49,14 @@ func CreateFasilitas(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Success create fasilitas", 201)
 }
 
+// GetAllFasilitas godoc
+// @Summary Get All Fasilitas
+// @Description Get All Fasilitas
+// @Tags Fasilitas
+// @Accept json
+// @Produce json
+// @Success 200 {object} Fasilitas
+// @Router /1.0/fasilitas [get]
 func GetAllFasilitas(c *fiber.Ctx) error {
 	var fasilitas []Fasilitas
 	if err := databases.DB.Table("fasilitas").Find(&fasilitas).Error; err != nil {
@@ -46,6 +65,15 @@ func GetAllFasilitas(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, fasilitas, 200)
 }
 
+// GetFasilitasById godoc
+// @Summary Get Fasilitas By Id
+// @Description Get Fasilitas By Id
+// @Tags Fasilitas
+// @Accept json
+// @Produce json
+// @Param id path int true "Fasilitas ID"
+// @Success 200 {object} Fasilitas
+// @Router /1.0/fasilitas/{id} [get]
 func GetFasilitasById(c *fiber.Ctx) error {
 	fasilitas := Fasilitas{}
 	id := c.Params("id")
@@ -59,6 +87,17 @@ func GetFasilitasById(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, fasilitas, 200)
 }
 
+// UpdateFasilitas godoc
+// @Summary Update Fasilitas
+// @Description Update Fasilitas
+// @Tags Fasilitas
+// @Accept json
+// @Produce json
+// @Param id path int true "Fasilitas ID"
+// @Param Authorization header string true "Bearer"
+// @Param UpdateFasilitas body RequestFasilitas true "Update Fasilitas"
+// @Success 200 {string} string "Success Update Fasilitas"
+// @Router /1.0/fasilitas/{id} [put]
 func UpdateFasilitas(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -90,6 +129,16 @@ func UpdateFasilitas(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Success update fasilitas", 200)
 }
 
+// DeleteFasilitas godoc
+// @Summary Delete Fasilitas
+// @Description Delete Fasilitas
+// @Tags Fasilitas
+// @Accept json
+// @Produce json
+// @Param id path int true "Fasilitas ID"
+// @Param Authorization header string true "Bearer"
+// @Success 200 {string} string "Success Delete Fasilitas"
+// @Router /1.0/fasilitas/{id} [delete]
 func DeleteFasilitas(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {

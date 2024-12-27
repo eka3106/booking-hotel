@@ -6,8 +6,963 @@
         "contact": {},
         "version": "1.0"
     },
-    "basePath": "/api/1.0",
+    "basePath": "/api",
     "paths": {
+        "/1.0/booking": {
+            "get": {
+                "description": "Get All Booking",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Get All Booking",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/booking.Booking"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Booking",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Create Booking",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Booking",
+                        "name": "CreateBooking",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/booking.RequestCreateBookingSwagger"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Create Booking",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/booking/admin": {
+            "get": {
+                "description": "Get All Booking on Hotel harus admin hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Get All Booking on Hotel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/booking.Booking"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/booking/proses-reservasi": {
+            "patch": {
+                "description": "Update Booking",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Update Booking",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Booking",
+                        "name": "UpdateBooking",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/booking.RequestUpdateBooking"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Update Booking",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/booking/{id}": {
+            "get": {
+                "description": "Get Booking By Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Booking"
+                ],
+                "summary": "Get Booking By Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Booking ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/booking.Booking"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/fasilitas": {
+            "get": {
+                "description": "Get All Fasilitas",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Get All Fasilitas",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/fasilitas.Fasilitas"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Fasilitas",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Create Fasilitas",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Fasilitas",
+                        "name": "CreateFasilitas",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/fasilitas.RequestFasilitas"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Create Fasilitas",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/fasilitas-hotel": {
+            "get": {
+                "description": "Get All Fasilitas Hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fasilitas Hotel"
+                ],
+                "summary": "Get All Fasilitas Hotel",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/fasilitashotel.ResponseFasilitasHotel"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Fasilitas Hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fasilitas Hotel"
+                ],
+                "summary": "Create Fasilitas Hotel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Fasilitas Hotel",
+                        "name": "CreateFasilitasHotel",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/fasilitashotel.RequestFasilitasHotel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Create Fasilitas Hotel",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/fasilitas-hotel/by-fasilitas/{id}": {
+            "get": {
+                "description": "Get Fasilitas By Fasilitas Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fasilitas Hotel"
+                ],
+                "summary": "Get Fasilitas By Fasilitas Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Fasilitas ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/fasilitashotel.ResponseFasilitasHotel"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/fasilitas-hotel/by-hotel/{id}": {
+            "get": {
+                "description": "Get Fasilitas By Hotel Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fasilitas Hotel"
+                ],
+                "summary": "Get Fasilitas By Hotel Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/fasilitashotel.ResponseFasilitasHotel"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/fasilitas-hotel/{id}": {
+            "get": {
+                "description": "Get Fasilitas Hotel By Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fasilitas Hotel"
+                ],
+                "summary": "Get Fasilitas Hotel By Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Fasilitas Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/fasilitashotel.ResponseFasilitasHotel"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update Fasilitas Hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fasilitas Hotel"
+                ],
+                "summary": "Update Fasilitas Hotel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Fasilitas Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Fasilitas Hotel",
+                        "name": "UpdateFasilitasHotel",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/fasilitashotel.RequestFasilitasHotel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Update Fasilitas Hotel",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete Fasilitas Hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fasilitas Hotel"
+                ],
+                "summary": "Delete Fasilitas Hotel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Fasilitas Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Delete Fasilitas Hotel",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/fasilitas/{id}": {
+            "get": {
+                "description": "Get Fasilitas By Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Get Fasilitas By Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Fasilitas ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/fasilitas.Fasilitas"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update Fasilitas",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Update Fasilitas",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Fasilitas ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Fasilitas",
+                        "name": "UpdateFasilitas",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/fasilitas.RequestFasilitas"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Update Fasilitas",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete Fasilitas",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Delete Fasilitas",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Fasilitas ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Delete Fasilitas",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/hak-akses": {
+            "get": {
+                "description": "Get All Hak Akses",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hak Akses"
+                ],
+                "summary": "Get All Hak Akses",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/hakakses.HakAkses"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Hak Akses",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hak Akses"
+                ],
+                "summary": "Create Hak Akses",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Hak Akses",
+                        "name": "CreateHakAkses",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/hakakses.RequestHakAkses"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Create Hak Akses",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/hak-akses/{id}": {
+            "get": {
+                "description": "Get Hak Akses By Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hak Akses"
+                ],
+                "summary": "Get Hak Akses By Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Hak Akses ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/hakakses.HakAkses"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update Hak Akses",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hak Akses"
+                ],
+                "summary": "Update Hak Akses",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Hak Akses ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Hak Akses",
+                        "name": "UpdateHakAkses",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/hakakses.RequestHakAkses"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Update Hak Akses",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete Hak Akses",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hak Akses"
+                ],
+                "summary": "Delete Hak Akses",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Hak Akses ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Delete Hak Akses",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/hotel": {
+            "get": {
+                "description": "Get All Hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Get All Hotel",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/hotel.Hotel"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Create Hotel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Hotel",
+                        "name": "CreateHotel",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/hotel.RequestHotel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Create Hotel",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/1.0/hotel/{id}": {
+            "get": {
+                "description": "Get Hotel By ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Get Hotel By ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/hotel.Hotel"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update Hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Update Hotel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Hotel",
+                        "name": "UpdateHotel",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/hotel.RequestHotel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Update Hotel",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete Hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hotel"
+                ],
+                "summary": "Delete Hotel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Delete Hotel",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/1.0/kamar": {
             "get": {
                 "description": "Get All Kamar",
@@ -315,6 +1270,45 @@
                 }
             }
         },
+        "/1.0/pembayaran/{id}": {
+            "get": {
+                "description": "Get Pembayaran By ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Pembayaran"
+                ],
+                "summary": "Get Pembayaran By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID Pembayaran",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pembayaran.ResponsePembayaran"
+                        }
+                    }
+                }
+            }
+        },
         "/1.0/register": {
             "post": {
                 "description": "Create User",
@@ -578,6 +1572,45 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/statuskamar.StatusKamar"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create Status Kamar",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Status Kamar"
+                ],
+                "summary": "Create Status Kamar",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Create Status Kamar",
+                        "name": "CreateStatusKamar",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/statuskamar.RequestStatusKamar"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Create Status Kamar",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -922,6 +1955,215 @@
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "booking.RequestCreateBookingSwagger": {
+            "type": "object",
+            "required": [
+                "kamar_id"
+            ],
+            "properties": {
+                "kamar_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "booking.RequestUpdateBooking": {
+            "type": "object",
+            "required": [
+                "booking_id",
+                "kamar_id",
+                "status_booking_id"
+            ],
+            "properties": {
+                "booking_id": {
+                    "type": "integer"
+                },
+                "kamar_id": {
+                    "type": "integer"
+                },
+                "status_booking_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "fasilitas.Fasilitas": {
+            "type": "object",
+            "required": [
+                "deskripsi",
+                "jenis_fasilitas"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deskripsi": {
+                    "type": "string",
+                    "minLength": 10
+                },
+                "fasilitas_id": {
+                    "type": "integer"
+                },
+                "jenis_fasilitas": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "fasilitas.RequestFasilitas": {
+            "type": "object",
+            "required": [
+                "deskripsi",
+                "jenis_fasilitas"
+            ],
+            "properties": {
+                "deskripsi": {
+                    "type": "string",
+                    "minLength": 10
+                },
+                "jenis_fasilitas": {
+                    "type": "string"
+                }
+            }
+        },
+        "fasilitashotel.RequestFasilitasHotel": {
+            "type": "object",
+            "required": [
+                "fasilitas_id",
+                "hotel_id"
+            ],
+            "properties": {
+                "fasilitas_id": {
+                    "type": "integer"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "fasilitashotel.ResponseFasilitasHotel": {
+            "type": "object",
+            "required": [
+                "fasilitas_id",
+                "hotel_id"
+            ],
+            "properties": {
+                "fasilitas": {
+                    "$ref": "#/definitions/fasilitas.Fasilitas"
+                },
+                "fasilitas_hotel_id": {
+                    "type": "integer"
+                },
+                "fasilitas_id": {
+                    "type": "integer"
+                },
+                "hotel": {
+                    "$ref": "#/definitions/hotel.Hotel"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "hakakses.HakAkses": {
+            "type": "object",
+            "required": [
+                "hak_akses"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "hak_akses": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                },
+                "hak_akses_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "hakakses.RequestHakAkses": {
+            "type": "object",
+            "required": [
+                "hak_akses"
+            ],
+            "properties": {
+                "hak_akses": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                }
+            }
+        },
+        "hotel.Hotel": {
+            "type": "object",
+            "required": [
+                "alamat_hotel",
+                "email_hotel",
+                "nama_hotel",
+                "telp_hotel"
+            ],
+            "properties": {
+                "alamat_hotel": {
+                    "type": "string",
+                    "minLength": 10
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email_hotel": {
+                    "type": "string"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                },
+                "nama_hotel": {
+                    "type": "string",
+                    "minLength": 3
+                },
+                "telp_hotel": {
+                    "type": "string",
+                    "minLength": 10
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "hotel.RequestHotel": {
+            "type": "object",
+            "required": [
+                "alamat_hotel",
+                "email_hotel",
+                "nama_hotel",
+                "telp_hotel"
+            ],
+            "properties": {
+                "alamat_hotel": {
+                    "type": "string",
+                    "minLength": 10
+                },
+                "email_hotel": {
+                    "type": "string"
+                },
+                "nama_hotel": {
+                    "type": "string",
+                    "minLength": 3
+                },
+                "telp_hotel": {
+                    "type": "string",
+                    "minLength": 10
                 }
             }
         },

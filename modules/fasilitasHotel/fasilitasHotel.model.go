@@ -21,3 +21,8 @@ type ResponseFasilitasHotel struct {
 	Hotel              hotel.Hotel         `json:"hotel" `
 	Fasilitas_id       int                 `json:"fasilitas_id" gorm:"foreignKey:Fasilitas_id" validate:"required"`
 }
+
+type RequestFasilitasHotel struct {
+	Hotel_id     int `json:"hotel_id" gorm:"foreignKey:Hotel_id" validate:"required"`
+	Fasilitas_id int `json:"fasilitas_id" gorm:"foreignKey:Fasilitas_id" validate:"required"`
+}

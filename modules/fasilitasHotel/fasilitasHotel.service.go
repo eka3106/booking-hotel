@@ -11,6 +11,16 @@ import (
 
 var validate = validator.New()
 
+// CreateFasilitasHotel godoc
+// @Summary Create Fasilitas Hotel
+// @Description Create Fasilitas Hotel
+// @Tags Fasilitas Hotel
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Param CreateFasilitasHotel body RequestFasilitasHotel true "Create Fasilitas Hotel"
+// @Success 201 {string} string "Success Create Fasilitas Hotel"
+// @Router /1.0/fasilitas-hotel [post]
 func CreateFasilitasHotel(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -122,6 +132,14 @@ func CreateFasilitasHotel(c *fiber.Ctx) error {
 // 	}
 // }
 
+// GetAllFasilitasHotel godoc
+// @Summary Get All Fasilitas Hotel
+// @Description Get All Fasilitas Hotel
+// @Tags Fasilitas Hotel
+// @Accept json
+// @Produce json
+// @Success 200 {object} ResponseFasilitasHotel
+// @Router /1.0/fasilitas-hotel [get]
 func GetAllFasilitasHotel(c *fiber.Ctx) error {
 	var fasilitasHotel []ResponseFasilitasHotel
 	if err := databases.DB.Preload("Hotel").Preload("Fasilitas").Table("fasilitas_hotel").Find(&fasilitasHotel).Error; err != nil {
@@ -130,6 +148,15 @@ func GetAllFasilitasHotel(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, fasilitasHotel, 200)
 }
 
+// GetFasilitasHotelById godoc
+// @Summary Get Fasilitas Hotel By Id
+// @Description Get Fasilitas Hotel By Id
+// @Tags Fasilitas Hotel
+// @Accept json
+// @Produce json
+// @Param id path int true "Fasilitas Hotel ID"
+// @Success 200 {object} ResponseFasilitasHotel
+// @Router /1.0/fasilitas-hotel/{id} [get]
 func GetFasilitasHotelById(c *fiber.Ctx) error {
 	fasilitasHotel := ResponseFasilitasHotel{}
 	id := c.Params("id")
@@ -143,6 +170,17 @@ func GetFasilitasHotelById(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, fasilitasHotel, 200)
 }
 
+// UpdateFasilitasHotel godoc
+// @Summary Update Fasilitas Hotel
+// @Description Update Fasilitas Hotel
+// @Tags Fasilitas Hotel
+// @Accept json
+// @Produce json
+// @Param id path int true "Fasilitas Hotel ID"
+// @Param Authorization header string true "Bearer"
+// @Param UpdateFasilitasHotel body RequestFasilitasHotel true "Update Fasilitas Hotel"
+// @Success 200 {string} string "Success Update Fasilitas Hotel"
+// @Router /1.0/fasilitas-hotel/{id} [put]
 func UpdateFasilitasHotel(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -204,6 +242,16 @@ func UpdateFasilitasHotel(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Success update fasilitas hotel", 200)
 }
 
+// DeleteFasilitasHotel godoc
+// @Summary Delete Fasilitas Hotel
+// @Description Delete Fasilitas Hotel
+// @Tags Fasilitas Hotel
+// @Accept json
+// @Produce json
+// @Param id path int true "Fasilitas Hotel ID"
+// @Param Authorization header string true "Bearer"
+// @Success 200 {string} string "Success Delete Fasilitas Hotel"
+// @Router /1.0/fasilitas-hotel/{id} [delete]
 func DeleteFasilitasHotel(c *fiber.Ctx) error {
 	claims := c.Locals("user")
 	if claims == nil {
@@ -223,6 +271,15 @@ func DeleteFasilitasHotel(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, "Success delete fasilitas hotel", 200)
 }
 
+// GetFasilitasByHotelId godoc
+// @Summary Get Fasilitas By Hotel Id
+// @Description Get Fasilitas By Hotel Id
+// @Tags Fasilitas Hotel
+// @Accept json
+// @Produce json
+// @Param id path int true "Hotel ID"
+// @Success 200 {object} ResponseFasilitasHotel
+// @Router /1.0/fasilitas-hotel/by-hotel/{id} [get]
 func GetFasilitasByHotelId(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var fasilitasHotel []ResponseFasilitasHotel
@@ -234,6 +291,15 @@ func GetFasilitasByHotelId(c *fiber.Ctx) error {
 	return libs.ResponseSuccess(c, fasilitasHotel, 200)
 }
 
+// GetFasilitasByFasilitasId godoc
+// @Summary Get Fasilitas By Fasilitas Id
+// @Description Get Fasilitas By Fasilitas Id
+// @Tags Fasilitas Hotel
+// @Accept json
+// @Produce json
+// @Param id path int true "Fasilitas ID"
+// @Success 200 {object} ResponseFasilitasHotel
+// @Router /1.0/fasilitas-hotel/by-fasilitas/{id} [get]
 func GetFasilitasByFasilitasId(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var fasilitasHotel []ResponseFasilitasHotel
@@ -242,6 +308,5 @@ func GetFasilitasByFasilitasId(c *fiber.Ctx) error {
 	} else if len(fasilitasHotel) == 0 {
 		return libs.ResponseError(c, "Data not found", 404)
 	}
-
 	return libs.ResponseSuccess(c, fasilitasHotel, 200)
 }
