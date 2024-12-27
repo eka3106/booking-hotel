@@ -90,10 +90,10 @@ func GetAllBookingByUser(c *fiber.Ctx) error {
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
 	}
-	var booking []Booking
-	if err := databases.DB.Preload("Status_booking").Table("booking").Where("user_id = ?", claims.(*user.Claims).User_id).Find(&booking).Error; err != nil {
+	var booking []ResponseBookingUser
+	if err := databases.DB.Preload("Kamar").Preload("Hotel").Preload("Status_booking").Joins("JOIN kamar ON kamar.kamar_id = booking.kamar_id").Joins("JOIN hotel ON hotel.hotel_id = booking.hotel_id").Joins("JOIN status_booking ON status_booking.status_booking_id = booking.status_booking_id").Table("booking").Where("user_id = ?", claims.(*user.Claims).User_id).Find(&booking).Error; err != nil {
 		return libs.ResponseError(c, err.Error(), 400)
-	}
+	}	
 	return libs.ResponseSuccess(c, booking, 200)
 }
 
@@ -114,10 +114,15 @@ func GetAllBookingByAdminHotel(c *fiber.Ctx) error {
 	if claims.(*user.Claims).Hak_akses_id != 3 {
 		return libs.ResponseError(c, "Forbidden", 403)
 	}
-	var booking []Booking
-	if err := databases.DB.Preload("Status_booking").Table("booking").Where("hotel_id = ?", claims.(*user.Claims).Hotel_id).Find(&booking).Error; err != nil {
-		return libs.ResponseError(c, err.Error(), 400)
-	}
+	var booking []ResponseBookingAdmin
+	if err := databases.DB.Preload("User").Preload("Kamar").Preload("Hotel").Preload("Status_booking").
+	Joins("JOIN users ON users.user_id = booking.user_id").
+	Joins("JOIN kamar ON kamar.kamar_id = booking.kamar_id").
+	Joins("JOIN hotel ON hotel.hotel_id = booking.hotel_id").
+	Joins("JOIN status_booking ON status_booking.status_booking_id = booking.status_booking_id").
+	Table("booking").Where("booking.hotel_id = ?", claims.(*user.Claims).Hotel_id).Find(&booking).Error; err != nil {
+	return libs.ResponseError(c, err.Error(), 400)
+}
 	return libs.ResponseSuccess(c, booking, 200)
 }
 
@@ -136,16 +141,21 @@ func GetBookingById(c *fiber.Ctx) error {
 	if claims == nil {
 		return libs.ResponseError(c, "Unauthorized", 401)
 	}
-	booking := Booking{}
+	booking := ResponseBookingAdmin{}
 	id := c.Params("id")
-	err := databases.DB.Preload("Status_booking").Table("booking").First(&booking, id)
+	err := databases.DB.Preload("User").Preload("Kamar").Preload("Hotel").Preload("Status_booking").
+	Joins("JOIN users ON users.user_id = booking.user_id").
+	Joins("JOIN kamar ON kamar.kamar_id = booking.kamar_id").
+	Joins("JOIN hotel ON hotel.hotel_id = booking.hotel_id").
+	Joins("JOIN status_booking ON status_booking.status_booking_id = booking.status_booking_id").
+	Table("booking").First(&booking, id)
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
 	}
 	if err.RowsAffected == 0 {
 		return libs.ResponseError(c, "Data not found", 404)
 	}
-	if booking.User_id != c.Locals("user").(*user.Claims).User_id && c.Locals("user").(*user.Claims).Hak_akses_id != 1 {
+	if booking.User_id != c.Locals("user").(*user.Claims).User_id && c.Locals("user").(*user.Claims).Hotel_id != booking.Hotel_id {
 		return libs.ResponseError(c, "Forbidden", 403)
 	}
 	return libs.ResponseSuccess(c, booking, 200)

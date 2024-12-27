@@ -17,6 +17,12 @@ type User struct {
 	Created_at    time.Time `json:"created_at" gorm:"default:CURRENT_TIMESTAMP"`
 }
 
+type ResponseUser struct {
+	User_id       int       `json:"user_id" gorm:"primaryKey;autoIncrement;not null"`
+	Email_user    string    `json:"email" gorm:"unique;not null" validate:"required,email"`
+	Nama 		string    `json:"nama" gorm:"not null" validate:"required,min=3"`	
+}
+
 type Claims struct {
 	User_id      int    `json:"user_id"`
 	Name         string `json:"name"`
@@ -42,4 +48,8 @@ type RequestCreateAdminHotel struct {
 type RequestLogin struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=8"`
+}
+
+func (ResponseUser) TableName() string {
+	return "users"
 }

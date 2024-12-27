@@ -7,7 +7,7 @@ func RouterBooking(app *fiber.App) {
 	router.Post("/booking", CreateBooking)
 	router.Get("/booking", GetAllBookingByUser)	
 	router.Get("/booking/admin", GetAllBookingByAdminHotel)
-	router.Get("/booking/:id", GetBookingById)
+	router.Get("/booking/detail/:id", GetBookingById)
 	router.Patch("/booking/proses-reservasi", UpdateAdminBooking)
 
 	// router.Delete("/booking/:id", CancelBooking)

@@ -84,9 +84,14 @@ func GetAllPembayaran(c *fiber.Ctx) error {
 		return libs.ResponseError(c, "Unauthorized", 401)
 	}
 	var pembayaran []ResponsePembayaran
-	if err := databases.DB.Preload("Booking").Table("pembayaran").Joins("JOIN booking ON booking.booking_id = pembayaran.booking_id").Where("booking.user_id = ?", claims.(*user.Claims).User_id).Find(&pembayaran).Error; err != nil {
-		return libs.ResponseError(c, err.Error(), 400)
-	}
+	if err := databases.DB.Preload("Booking").Preload("Booking.Status_booking").
+        Joins("JOIN booking ON booking.booking_id = pembayaran.booking_id").
+        Joins("JOIN status_booking ON booking.status_booking_id = status_booking.status_booking_id").Table("pembayaran").
+        Where("booking.user_id = ?", claims.(*user.Claims).User_id).
+        Find(&pembayaran).Error; err != nil {
+        return libs.ResponseError(c, err.Error(), 400)
+    }
+	
 	return libs.ResponseSuccess(c, pembayaran, 200)
 }
 
@@ -107,7 +112,13 @@ func GetPembayaranById(c *fiber.Ctx) error {
 	}
 	var pembayaran ResponsePembayaran
 	id := c.Params("id")
-	err := databases.DB.Preload("Booking").Table("pembayaran").First(&pembayaran, id)
+
+	err := databases.DB.Preload("Booking").Preload("Booking.Status_booking").
+        Joins("JOIN booking ON booking.booking_id = pembayaran.booking_id").
+        Joins("JOIN status_booking ON booking.status_booking_id = status_booking.status_booking_id").Table("pembayaran").
+        Where("pembayaran.pembayaran_id = ?", id).
+        Find(&pembayaran)    
+    
 	if err.Error != nil {
 		return libs.ResponseError(c, err.Error.Error(), 400)
 	}

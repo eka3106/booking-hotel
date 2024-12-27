@@ -61,7 +61,7 @@ func CreateKamar(c *fiber.Ctx) error {
 // @Success 200 {object} Kamar
 // @Router /1.0/kamar [get]
 func GetAllKamar(c *fiber.Ctx) error {
-	var kamar []Kamar
+	var kamar []ResponseKamar
 	if err := databases.DB.Preload("Status_kamar").Table("kamar").Find(&kamar).Error; err != nil {
 		return libs.ResponseError(c, err.Error(), 400)
 	}
@@ -78,7 +78,7 @@ func GetAllKamar(c *fiber.Ctx) error {
 // @Success 200 {object} Kamar
 // @Router /1.0/kamar/{id} [get]
 func GetKamarById(c *fiber.Ctx) error {
-	kamar := Kamar{}
+	kamar := ResponseKamar{}
 	id := c.Params("id")
 	err := databases.DB.Preload("Status_kamar").Table("kamar").First(&kamar, id)
 	if err.Error != nil {
