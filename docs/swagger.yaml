@@ -189,8 +189,6 @@ definitions:
         type: integer
       nomor_kamar:
         type: string
-      status_kamar:
-        $ref: '#/definitions/statuskamar.StatusKamar'
       status_kamar_id:
         type: integer
       tipe_kamar_id:
@@ -1001,6 +999,23 @@ paths:
       consumes:
       - application/json
       description: Get All Kamar
+      parameters:
+      - description: Status Kamar
+        in: query
+        name: status_kamar
+        type: string
+      - description: Price
+        in: query
+        name: price
+        type: string
+      - description: Tipe Kamar
+        in: query
+        name: tipe_kamar
+        type: string
+      - description: ID Hotel
+        in: query
+        name: id_hotel
+        type: string
       produces:
       - application/json
       responses:
@@ -1112,27 +1127,6 @@ paths:
           schema:
             type: string
       summary: Update Kamar
-      tags:
-      - Kamar
-  /1.0/kamar/hotel/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Get Kamar By ID Hotel
-      parameters:
-      - description: Hotel ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/kamar.Kamar'
-      summary: Get Kamar By ID Hotel
       tags:
       - Kamar
   /1.0/login:

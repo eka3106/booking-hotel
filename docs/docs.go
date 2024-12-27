@@ -983,6 +983,32 @@ const docTemplate = `{
                     "Kamar"
                 ],
                 "summary": "Get All Kamar",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Status Kamar",
+                        "name": "status_kamar",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Price",
+                        "name": "price",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Tipe Kamar",
+                        "name": "tipe_kamar",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID Hotel",
+                        "name": "id_hotel",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1027,38 +1053,6 @@ const docTemplate = `{
                         "description": "Success Create Kamar",
                         "schema": {
                             "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/1.0/kamar/hotel/{id}": {
-            "get": {
-                "description": "Get Kamar By ID Hotel",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Kamar"
-                ],
-                "summary": "Get Kamar By ID Hotel",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Hotel ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/kamar.Kamar"
                         }
                     }
                 }
@@ -2228,9 +2222,6 @@ const docTemplate = `{
                 },
                 "nomor_kamar": {
                     "type": "string"
-                },
-                "status_kamar": {
-                    "$ref": "#/definitions/statuskamar.StatusKamar"
                 },
                 "status_kamar_id": {
                     "type": "integer"
