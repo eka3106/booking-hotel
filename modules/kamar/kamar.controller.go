@@ -7,6 +7,7 @@ func RouterKamar(app *fiber.App) {
 	router.Post("/", CreateKamar)
 	router.Get("/", GetAllKamar)
 	router.Get("/:id", GetKamarById)
+	router.Get("/hotel/:id", GetKamarByIdHotel)
 	router.Put("/:id", UpdateKamar)
 	router.Delete("/:id", DeleteKamar)
 }

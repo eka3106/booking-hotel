@@ -1025,6 +1025,38 @@
                 }
             }
         },
+        "/1.0/kamar/hotel/{id}": {
+            "get": {
+                "description": "Get Kamar By ID Hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kamar"
+                ],
+                "summary": "Get Kamar By ID Hotel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/kamar.Kamar"
+                        }
+                    }
+                }
+            }
+        },
         "/1.0/kamar/{id}": {
             "get": {
                 "description": "Get Kamar By ID",

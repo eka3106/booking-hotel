@@ -168,3 +168,22 @@ func DeleteKamar(c *fiber.Ctx) error {
 	}
 	return libs.ResponseSuccess(c, "Success delete kamar", 200)
 }
+
+// GetKamarByIdHotel godoc
+// @Summary Get Kamar By ID Hotel
+// @Description Get Kamar By ID Hotel
+// @Tags Kamar
+// @Accept json
+// @Produce json
+// @Param id path int true "Hotel ID"
+// @Success 200 {object} Kamar
+// @Router /1.0/kamar/hotel/{id} [get]
+func GetKamarByIdHotel(c *fiber.Ctx) error {
+	kamar := []Kamar{}
+	id := c.Params("id")
+	err := databases.DB.Preload("Status_kamar").Table("kamar").Where("hotel_id = ?", id).Find(&kamar)
+	if err.Error != nil {
+		return libs.ResponseError(c, err.Error.Error(), 400)
+	}
+	return libs.ResponseSuccess(c, kamar, 200)
+}
