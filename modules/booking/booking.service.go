@@ -9,6 +9,8 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 var validate = validator.New()
@@ -41,38 +43,26 @@ func CreateBooking(c *fiber.Ctx) error {
 		return libs.ResponseError(c, errors, 400)
 	}
 	kamar := kamar.Kamar{}
-	if err := databases.DB.Table("kamar").Where("kamar_id = ?", booking.Kamar_id).First(&kamar); err.Error != nil {
-		return libs.ResponseError(c, err.Error.Error(), 400)
-	} else if err.RowsAffected == 0 {
-		return libs.ResponseError(c, "Kamar not found", 404)
-	}
-	booking.User_id = claims.(*user.Claims).User_id
-	booking.Hotel_id = kamar.Hotel_id
-	booking.Total_biaya = kamar.Harga * booking.Jumlah_hari
-	booking.Status_booking_id = 1
-	var wg sync.WaitGroup
-	updateKamar := make(chan bool)
-	wg.Add(1)
-	go func(ch chan bool) {
-		if err := databases.DB.Table("kamar").Where("kamar_id = ?", booking.Kamar_id).Update("status_kamar_id", 3); err.Error != nil {
-			ch <- false
-		} else if err.RowsAffected == 0 {
-			ch <- false
-		} else {
-			ch <- true
-		}
-	}(updateKamar)
-	go func() {
-		wg.Wait()
-		close(updateKamar)
-	}()
-	isSuccess := <-updateKamar
-	if !isSuccess {
-		return libs.ResponseError(c, "Gagal booking", 400)
-	}
-	if err := databases.DB.Table("booking").Create(&booking).Error; err != nil {
+	if err := databases.DB.Transaction(
+		func(tx *gorm.DB) error {
+			if err := tx.Table("kamar").Where("kamar_id = ? AND status_kamar_id = 1", booking.Kamar_id).Clauses(clause.Locking{Strength:"UPDATE"}).First(&kamar).Error; err != nil {
+				return err
+			} 
+			booking.User_id = claims.(*user.Claims).User_id
+			booking.Hotel_id = kamar.Hotel_id
+			booking.Total_biaya = kamar.Harga * booking.Jumlah_hari
+			booking.Status_booking_id = 1
+			if err := tx.Table("kamar").Where("kamar_id = ? AND status_kamar_id = 1", booking.Kamar_id).Update("status_kamar_id", 3).Error; err != nil {
+				return err
+			} 
+			if err := tx.Table("booking").Create(&booking).Error; err != nil {
+				return err
+			}
+			return nil
+		},
+	); err != nil {
 		return libs.ResponseError(c, err.Error(), 400)
-	}
+	} 
 	return libs.ResponseSuccess(c, "Success create booking", 201)
 }
 

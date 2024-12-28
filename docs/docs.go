@@ -998,6 +998,18 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Skip",
+                        "name": "skip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "Tipe Kamar",
                         "name": "tipe_kamar",
                         "in": "query"

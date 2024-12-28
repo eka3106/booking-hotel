@@ -1008,6 +1008,14 @@ paths:
         in: query
         name: price
         type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: string
+      - description: Skip
+        in: query
+        name: skip
+        type: string
       - description: Tipe Kamar
         in: query
         name: tipe_kamar

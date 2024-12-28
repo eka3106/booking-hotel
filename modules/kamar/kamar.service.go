@@ -4,9 +4,12 @@ import (
 	"booking-hotel/databases"
 	"booking-hotel/libs"
 	"booking-hotel/modules/user"
+	"strconv"
+	"sync"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 )
 
 var validate = validator.New()
@@ -60,15 +63,18 @@ func CreateKamar(c *fiber.Ctx) error {
 // @Produce json
 // @Param status_kamar query string false "Status Kamar"
 // @Param price query string false "Price"
+// @Param limit query string false "Limit"
+// @Param skip query string false "Skip"
 // @Param tipe_kamar query string false "Tipe Kamar"
 // @Param id_hotel query string false "ID Hotel"
 // @Success 200 {object} Kamar
 // @Router /1.0/kamar [get]
 func GetAllKamar(c *fiber.Ctx) error {
-	var kamar []ResponseKamar
 	query := databases.DB.Preload("Hotel").Preload("Tipe_kamar").Preload("Status_kamar").Table("kamar")
 	status_kamar := c.Query("status_kamar")
 	price := c.Query("price")
+	limit := c.Query("limit")	
+	skip := c.Query("skip")
 	tipe_kamar := c.Query("tipe_kamar")
 	id_hotel := c.Query("id_hotel")
 	if status_kamar != "" {
@@ -83,10 +89,57 @@ func GetAllKamar(c *fiber.Ctx) error {
 	if id_hotel != "" {
 		query = query.Where("hotel_id = ?", id_hotel)
 	}
-	if err := query.Find(&kamar).Error; err != nil {
-		return libs.ResponseError(c, err.Error(), 400)
+	var wg sync.WaitGroup
+	var kamar []ResponseKamar
+	var totalData int64
+	errorGetData := make(chan bool,1)
+	errorCountData := make(chan bool,1)
+	
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		queryCopy := query.Session(&gorm.Session{})
+		if limit != "" {
+			limitInt, err := strconv.Atoi(limit)
+			if err != nil {
+				errorGetData <- true
+			}
+			queryCopy = queryCopy.Limit(limitInt)
+		}
+		if skip != "" {
+			skipInt, err := strconv.Atoi(skip)
+			if err != nil {				
+				errorGetData <- true
+			}
+			queryCopy = queryCopy.Offset(skipInt)
+		}
+		if err := queryCopy.Find(&kamar).Error; err != nil {
+			errorGetData <- true
+		}
+		errorGetData <- false
+	}()
+
+	wg.Add(1)
+	go func () {
+		defer wg.Done()
+		queryCopy := query.Session(&gorm.Session{})
+		if err := queryCopy.Model(&kamar).Count(&totalData).Error; err != nil {
+			errorCountData <- true
+		}
+		errorCountData <- false
+	} ()
+	
+	go func() {
+		wg.Wait()
+		close(errorGetData)
+		close(errorCountData)
+	}()
+	isErrorGetData := <-errorGetData
+	isErrorCountData := <-errorCountData
+	if isErrorGetData || isErrorCountData {
+		return libs.ResponseError(c, "Failed get data", 400)
 	}
-	return libs.ResponseSuccess(c, kamar, 200)
+	return libs.ResponsePagination(c, kamar, totalData, 200)
 }
 
 // GetKamarById godoc
