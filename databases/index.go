@@ -16,13 +16,7 @@ var (
 	SqlDb *sql.DB
 )
 
-func init() {
-	viper.SetConfigFile(".env")
-    viper.AutomaticEnv()
-    if err := viper.ReadInConfig(); err != nil {
-        log.Fatalf("Error reading config file, %s", err)
-    }
-
+func init() {	
     // Membuat string koneksi
     serviceURI := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=require",
         viper.GetString("DB_USER"),

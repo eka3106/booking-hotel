@@ -22,7 +22,7 @@ func verifyToken(c *fiber.Ctx) error {
 	token := libs.ExtractToken(c)
 	claims := &user.Claims{}
 	// verify token
-	secret := []byte(viper.GetString("SECRET_JWT"))
+	secret := []byte(viper.GetString("JWT_SECRET"))
 	_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return secret, nil
 	})

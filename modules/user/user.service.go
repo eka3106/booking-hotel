@@ -171,7 +171,7 @@ func createToken(userDb User) (string, error) {
 		"hotel_id":     userDb.Hotel_id,
 		"exp":          time.Now().Add(time.Hour * 24 * 365).Unix(),
 	})
-	token, err := jwtClaim.SignedString([]byte(viper.GetString("SECRET_JWT")))
+	token, err := jwtClaim.SignedString([]byte(viper.GetString("JWT_SECRET")))
 	if err != nil {
 		return "", err
 	}
