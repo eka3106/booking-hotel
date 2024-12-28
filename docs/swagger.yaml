@@ -35,9 +35,9 @@ definitions:
     type: object
   booking.RequestCreateBookingSwagger:
     properties:
-      kamar_id:
+      jumlah_hari:
         type: integer
-      user_id:
+      kamar_id:
         type: integer
     required:
     - kamar_id

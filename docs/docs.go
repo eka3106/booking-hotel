@@ -2009,10 +2009,10 @@ const docTemplate = `{
                 "kamar_id"
             ],
             "properties": {
-                "kamar_id": {
+                "jumlah_hari": {
                     "type": "integer"
                 },
-                "user_id": {
+                "kamar_id": {
                     "type": "integer"
                 }
             }

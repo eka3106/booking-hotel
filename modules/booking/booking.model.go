@@ -34,7 +34,7 @@ type RequestCreateBooking struct {
 
 type RequestCreateBookingSwagger struct {
 	Kamar_id    int `json:"kamar_id" validate:"required"`
-	Jumlah_hari int `json:"user_id"`
+	Jumlah_hari int `json:"jumlah_hari"`
 }
 
 type RequestAdmin struct {
